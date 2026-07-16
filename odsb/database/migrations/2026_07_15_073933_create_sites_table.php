@@ -10,16 +10,27 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-     Schema::create('sites', function (Blueprint $table) {
-    $table->id();
-    $table->string('site_id');
-    $table->string('site_name');
-    $table->string('rev_all');
-    $table->string('status');
-    $table->timestamps();
-});
-    }
+{
+    Schema::create('sites', function (Blueprint $table) {
+        $table->id();
+
+        $table->string('site_id')->unique();
+        $table->string('site_name')->nullable();
+
+        $table->string('regional')->nullable();
+        $table->string('branch')->nullable();
+        $table->string('cluster')->nullable();
+        $table->string('kabupaten')->nullable();
+        $table->string('kecamatan')->nullable();
+        $table->text('address')->nullable();
+
+        $table->decimal('latitude', 10, 7)->nullable();
+        $table->decimal('longitude', 10, 7)->nullable();
+
+        $table->boolean('is_active')->default(true);
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.

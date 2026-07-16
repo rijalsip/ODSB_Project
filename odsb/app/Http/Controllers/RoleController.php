@@ -2,55 +2,93 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Role\StoreRoleRequest;
+use App\Http\Requests\Role\UpdateRoleRequest;
 use App\Models\Role;
-use Illuminate\Http\Request;
+use App\Services\RoleService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Throwable;
 
 class RoleController extends Controller
 {
-    public function index()
-    {
-        return response()->json(Role::all());
+    public function __construct(
+        private readonly RoleService $roleService
+    ) {
     }
 
-    public function store(Request $request)
+    public function index(): View
     {
-        $request->validate([
-            'role' => 'required'
-        ]);
+        $roles = $this->roleService
+            ->getPaginatedRoles();
 
-        $role = Role::create($request->all());
-
-        return response()->json([
-            'message' => 'Role berhasil ditambahkan',
-            'data' => $role
-        ], 201);
+        return view('roles.index', compact('roles'));
     }
 
-    public function show(Role $role)
+    public function create(): View
     {
-        return response()->json($role);
+        return view('roles.create');
     }
 
-    public function update(Request $request, Role $role)
-    {
-        $request->validate([
-            'role' => 'required'
-        ]);
+    public function store(
+        StoreRoleRequest $request
+    ): RedirectResponse {
+        $this->roleService->createRole(
+            $request->validated()
+        );
 
-        $role->update($request->all());
-
-        return response()->json([
-            'message' => 'Role berhasil diubah',
-            'data' => $role
-        ]);
+        return redirect()
+            ->route('roles.index')
+            ->with(
+                'success',
+                'Role berhasil ditambahkan.'
+            );
     }
 
-    public function destroy(Role $role)
+    public function edit(Role $role): View
     {
-        $role->delete();
+        return view(
+            'roles.edit',
+            compact('role')
+        );
+    }
 
-        return response()->json([
-            'message' => 'Role berhasil dihapus'
-        ]);
+    public function update(
+        UpdateRoleRequest $request,
+        Role $role
+    ): RedirectResponse {
+        $this->roleService->updateRole(
+            $role,
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('roles.index')
+            ->with(
+                'success',
+                'Role berhasil diperbarui.'
+            );
+    }
+
+    public function destroy(
+        Role $role
+    ): RedirectResponse {
+        try {
+            $this->roleService->deleteRole($role);
+
+            return redirect()
+                ->route('roles.index')
+                ->with(
+                    'success',
+                    'Role berhasil dihapus.'
+                );
+        } catch (Throwable $exception) {
+            return redirect()
+                ->route('roles.index')
+                ->with(
+                    'error',
+                    $exception->getMessage()
+                );
+        }
     }
 }

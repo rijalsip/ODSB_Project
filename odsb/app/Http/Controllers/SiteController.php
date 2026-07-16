@@ -2,61 +2,160 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Site\ImportSiteRequest;
+use App\Http\Requests\Site\StoreSiteRequest;
+use App\Http\Requests\Site\UpdateSiteRequest;
 use App\Models\Site;
-use Illuminate\Http\Request;
+use App\Services\SiteService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Throwable;
 
 class SiteController extends Controller
 {
-    public function index()
-    {
-        return response()->json(Site::all());
+    public function __construct(
+        private readonly SiteService $siteService
+    ) {
     }
 
-    public function store(Request $request)
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(): View
     {
-        $request->validate([
-            'site_id' => 'required',
-            'site_name' => 'required',
-            'rev_all' => 'required',
-            'status' => 'required',
-        ]);
+        $sites = $this->siteService
+            ->getPaginatedSites();
 
-        $site = Site::create($request->all());
-
-        return response()->json([
-            'message' => 'Site berhasil ditambahkan',
-            'data' => $site
-        ], 201);
+        return view(
+            'sites.index',
+            compact('sites')
+        );
     }
 
-    public function show(Site $site)
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(): View
     {
-        return response()->json($site);
+        return view('sites.create');
     }
 
-    public function update(Request $request, Site $site)
-    {
-        $request->validate([
-            'site_id' => 'required',
-            'site_name' => 'required',
-            'rev_all' => 'required',
-            'status' => 'required',
-        ]);
+    /**
+     * Store a newly created resource.
+     */
+    public function store(
+        StoreSiteRequest $request
+    ): RedirectResponse {
 
-        $site->update($request->all());
+        $this->siteService->createSite(
+            $request->validated()
+        );
 
-        return response()->json([
-            'message' => 'Site berhasil diubah',
-            'data' => $site
-        ]);
+        return redirect()
+            ->route('sites.index')
+            ->with(
+                'success',
+                'Site berhasil ditambahkan.'
+            );
     }
 
-    public function destroy(Site $site)
-    {
-        $site->delete();
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(
+        Site $site
+    ): View {
 
-        return response()->json([
-            'message' => 'Site berhasil dihapus'
-        ]);
+        return view(
+            'sites.edit',
+            compact('site')
+        );
+    }
+
+    /**
+     * Update the specified resource.
+     */
+    public function update(
+        UpdateSiteRequest $request,
+        Site $site
+    ): RedirectResponse {
+
+        $this->siteService->updateSite(
+            $site,
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('sites.index')
+            ->with(
+                'success',
+                'Site berhasil diperbarui.'
+            );
+    }
+
+    /**
+     * Remove the specified resource.
+     */
+    public function destroy(
+        Site $site
+    ): RedirectResponse {
+
+        try {
+
+            $this->siteService->deleteSite(
+                $site
+            );
+
+            return redirect()
+                ->route('sites.index')
+                ->with(
+                    'success',
+                    'Site berhasil dihapus.'
+                );
+
+        } catch (Throwable $exception) {
+
+            return redirect()
+                ->route('sites.index')
+                ->with(
+                    'error',
+                    $exception->getMessage()
+                );
+
+        }
+
+    }
+
+    /**
+     * Import Excel
+     */
+    public function import(
+        ImportSiteRequest $request
+    ): RedirectResponse {
+
+        try {
+
+            $this->siteService->importSite(
+                $request->file('file')
+            );
+
+            return redirect()
+                ->route('sites.index')
+                ->with(
+                    'success',
+                    'Data Site berhasil diimport.'
+                );
+
+        } catch (Throwable $exception) {
+
+            return redirect()
+                ->route('sites.index')
+                ->with(
+                    'error',
+                    $exception->getMessage()
+                );
+
+        }
+
     }
 }

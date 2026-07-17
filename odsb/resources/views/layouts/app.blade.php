@@ -44,14 +44,29 @@
         </ul>
 
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <span class="nav-link">
-                    <i class="fas fa-user-circle mr-1"></i>
-                    Administrator
-                </span>
-            </li>
-        </ul>
 
+    <li class="nav-item d-flex align-items-center">
+
+        <span class="mr-3 text-dark">
+            <i class="fas fa-user-circle text-primary mr-1"></i>
+            <strong>{{ Auth::user()->name }}</strong>
+        </span>
+
+        <form action="{{ route('logout') }}" method="POST" class="mb-0">
+            @csrf
+
+            <button
+                type="submit"
+                class="btn btn-danger btn-sm"
+            >
+                <i class="fas fa-sign-out-alt mr-1"></i>
+                Logout
+            </button>
+        </form>
+
+    </li>
+
+</ul>
     </nav>
 
     <!-- Sidebar -->
@@ -91,8 +106,8 @@
                         </a>
                     </li>
 
-                    <!-- Master Data -->
-                    <li class="nav-header">
+                    <!-- Master Data -->    
+                                        <li class="nav-header">
                         MASTER DATA
                     </li>
 
@@ -122,24 +137,24 @@
     >
         <i class="nav-icon fas fa-users"></i>
 
-        <p>User</p>
-    </a>
-</li>
+                            <p>User</p>
+                        </a>
+                    </li>
 
                     <li class="nav-item">
-    <a
-        href="{{ route('sites.index') }}"
-        class="nav-link {{
-            request()->routeIs('sites.*')
-                ? 'active'
-                : ''
-        }}"
-    >
-        <i class="nav-icon fas fa-tower-cell"></i>
+                        <a
+                            href="{{ route('sites.index') }}"
+                            class="nav-link {{
+                                request()->routeIs('sites.*')
+                                    ? 'active'
+                                    : ''
+                            }}"
+                        >
+                            <i class="nav-icon fas fa-tower-cell"></i>
 
-        <p>Site</p>
-    </a>
-</li>
+                            <p>Site</p>
+                        </a>
+                    </li>
 
                     <!-- Monitoring -->
                     <li class="nav-header">

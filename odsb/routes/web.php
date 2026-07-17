@@ -5,7 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
-// use App\Http\Controllers\SellingController;
 
 Route::get('/', function () {
     return redirect()->route('login');

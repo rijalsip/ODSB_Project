@@ -2,59 +2,108 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
+use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Services\UserService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        return response()->json(User::all());
+    public function __construct(
+        private readonly UserService $userService
+    ) {
     }
 
-    public function store(Request $request)
+    public function index(): View
     {
-        $validated = $request->validate([
-            'nama' => 'required|string',
-            'id_user' => 'required|string|unique:users,id_user',
-            'role' => 'required|string',
-        ]);
+        $users = $this->userService
+            ->getPaginatedUsers();
 
-        $user = User::create($validated);
-
-        return response()->json([
-            'message' => 'User berhasil ditambahkan',
-            'data' => $user
-        ], 201);
+        return view('users.index', compact('users'));
     }
 
-    public function show(User $user)
+    public function create(): View
     {
-        return response()->json($user);
+        $roles = Role::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('users.create', compact('roles'));
     }
 
-    public function update(Request $request, User $user)
-    {
-        $validated = $request->validate([
-            'nama' => 'required|string',
-            'id_user' => 'required|string|unique:users,id_user,' . $user->id,
-            'role' => 'required|string',
-        ]);
+    public function store(
+        StoreUserRequest $request
+    ): RedirectResponse {
 
-        $user->update($validated);
+        $this->userService->createUser(
+            $request->validated()
+        );
 
-        return response()->json([
-            'message' => 'User berhasil diubah',
-            'data' => $user
-        ]);
+        return redirect()
+            ->route('users.index')
+            ->with(
+                'success',
+                'User berhasil ditambahkan.'
+            );
     }
 
-    public function destroy(User $user)
-    {
-        $user->delete();
+    public function edit(
+        User $user
+    ): View {
 
-        return response()->json([
-            'message' => 'User berhasil dihapus'
-        ]);
+        $roles = Role::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view(
+            'users.edit',
+            compact(
+                'user',
+                'roles'
+            )
+        );
+    }
+
+    public function update(
+        UpdateUserRequest $request,
+        User $user
+    ): RedirectResponse {
+
+        $data = $request->validated();
+
+        if (empty($data['password'])) {
+            unset($data['password']);
+        }
+
+        $this->userService->updateUser(
+            $user,
+            $data
+        );
+
+        return redirect()
+            ->route('users.index')
+            ->with(
+                'success',
+                'User berhasil diperbarui.'
+            );
+    }
+
+    public function destroy(
+        User $user
+    ): RedirectResponse {
+
+        $this->userService->deleteUser(
+            $user
+        );
+
+        return redirect()
+            ->route('users.index')
+            ->with(
+                'success',
+                'User berhasil dihapus.'
+            );
     }
 }

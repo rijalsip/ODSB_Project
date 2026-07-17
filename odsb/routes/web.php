@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -19,6 +20,7 @@ Route::get('/dashboard', function () {
 */
 
 Route::resource('roles', RoleController::class);
+Route::resource('users', UserController::class);
 
 /*
 |--------------------------------------------------------------------------

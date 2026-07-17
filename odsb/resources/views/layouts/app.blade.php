@@ -111,8 +111,15 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
-    <a href="#" class="nav-link">
+              <li class="nav-item">
+    <a
+        href="{{ route('users.index') }}"
+        class="nav-link {{
+            request()->routeIs('users.*')
+                ? 'active'
+                : ''
+        }}"
+    >
         <i class="nav-icon fas fa-users"></i>
 
         <p>User</p>

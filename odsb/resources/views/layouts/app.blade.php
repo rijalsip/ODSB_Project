@@ -112,20 +112,27 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-users"></i>
+    <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-users"></i>
 
-                            <p>User</p>
-                        </a>
-                    </li>
+        <p>User</p>
+    </a>
+</li>
 
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-tower-cell"></i>
+    <a
+        href="{{ route('sites.index') }}"
+        class="nav-link {{
+            request()->routeIs('sites.*')
+                ? 'active'
+                : ''
+        }}"
+    >
+        <i class="nav-icon fas fa-tower-cell"></i>
 
-                            <p>Site</p>
-                        </a>
-                    </li>
+        <p>Site</p>
+    </a>
+</li>
 
                     <!-- Monitoring -->
                     <li class="nav-header">

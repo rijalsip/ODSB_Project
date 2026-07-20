@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TelegramBotController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -28,6 +29,9 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
+    
+Route::post('/telegram/webhook', [TelegramBotController::class, 'webhook'])
+    ->name('telegram.webhook');
 
 /*
 |--------------------------------------------------------------------------

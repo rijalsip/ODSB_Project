@@ -29,7 +29,7 @@ return new class extends Migration
                 ->nullable();
 
             $table->string('telegram_chat_id')
-                ->nullable()
+                ->nullable()    
                 ->unique();
 
             $table->string('telegram_username')

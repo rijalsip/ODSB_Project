@@ -14,6 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
 
+        $middleware->validateCsrfTokens(
+            except: [
+                'telegram/webhook',
+            ]
+        );
+
         $middleware->alias([
             'role' => RoleMiddleware::class,
         ]);

@@ -81,7 +81,9 @@
         </a>
 
         <div class="sidebar">
-
+            @php
+    $role = Auth::user()->role->name;
+@endphp
             <nav class="mt-2">
                 <ul
                     class="nav nav-pills nav-sidebar flex-column"
@@ -90,6 +92,7 @@
                     data-accordion="false"
                 >
 
+                                                            @if($role !== 'Direct Sales')
                     <!-- Dashboard -->
                     <li class="nav-item">
                         <a
@@ -106,8 +109,8 @@
                         </a>
                     </li>
 
-                    <!-- Master Data -->    
-                                        <li class="nav-header">
+                    <!-- Master Data -->
+                    <li class="nav-header">
                         MASTER DATA
                     </li>
 
@@ -126,16 +129,16 @@
                         </a>
                     </li>
 
-              <li class="nav-item">
-    <a
-        href="{{ route('users.index') }}"
-        class="nav-link {{
-            request()->routeIs('users.*')
-                ? 'active'
-                : ''
-        }}"
-    >
-        <i class="nav-icon fas fa-users"></i>
+                    <li class="nav-item">
+                        <a
+                            href="{{ route('users.index') }}"
+                            class="nav-link {{
+                                request()->routeIs('users.*')
+                                    ? 'active'
+                                    : ''
+                            }}"
+                        >
+                            <i class="nav-icon fas fa-users"></i>
 
                             <p>User</p>
                         </a>
@@ -155,6 +158,7 @@
                             <p>Site</p>
                         </a>
                     </li>
+                    @endif
 
                     <!-- Monitoring -->
                     <li class="nav-header">

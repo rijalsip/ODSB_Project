@@ -29,16 +29,95 @@ class UserService
         array $data
     ): User {
         return DB::transaction(function () use ($user, $data) {
+
             $user->update($data);
 
             return $user->refresh();
+
         });
     }
 
     public function deleteUser(User $user): void
     {
         DB::transaction(function () use ($user) {
+
             $user->delete();
+
         });
+    }
+
+    /**
+     * Cari user berdasarkan username.
+     */
+    public function findByUsername(
+        string $username
+    ): ?User {
+
+        return User::query()
+            ->with('role')
+            ->where('username', $username)
+            ->where('is_active', true)
+            ->first();
+
+    }
+
+    /**
+     * Cari user berdasarkan Telegram Chat ID.
+     */
+    public function findByTelegramChatId(
+        string $chatId
+    ): ?User {
+
+        return User::query()
+            ->with([
+                'role',
+                'sites',
+            ])
+            ->where('telegram_chat_id', $chatId)
+            ->where('is_active', true)
+            ->first();
+
+    }
+
+    /**
+     * Hubungkan akun Telegram ke user.
+     */
+    public function bindTelegram(
+        User $user,
+        string $chatId,
+        ?string $telegramUsername
+    ): User {
+
+        return DB::transaction(function () use (
+            $user,
+            $chatId,
+            $telegramUsername
+        ) {
+
+            $user->update([
+
+                'telegram_chat_id' => $chatId,
+
+                'telegram_username' => $telegramUsername,
+
+            ]);
+
+            return $user->refresh();
+
+        });
+
+    }
+
+    /**
+     * Ambil seluruh Site milik user.
+     */
+    public function getUserSites(
+        User $user
+    )
+    {
+        return $user->sites()
+            ->where('is_active', true)
+            ->orderBy('site_name')
+            ->get();
     }
 }

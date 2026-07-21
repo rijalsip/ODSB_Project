@@ -65,4 +65,26 @@ class SiteService
         });
 
     }
+    /**
+ * Cari Site berdasarkan ID.
+ */
+/**
+ * Cari Site milik User.
+ */
+public function findUserSite(
+    int $siteId,
+    int $userId
+): ?Site {
+
+    return Site::query()
+        ->where('id', $siteId)
+        ->where('is_active', true)
+        ->whereHas('users', function ($query) use ($userId) {
+
+            $query->where('users.id', $userId);
+
+        })
+        ->first();
+
+}
 }

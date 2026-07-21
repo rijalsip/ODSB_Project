@@ -55,8 +55,14 @@ class TelegramSessionService
         return $session->refresh();
     }
 
-    public function clearSession(TelegramSession $session): void
-    {
-        $session->delete();
-    }
+    public function resetSession(TelegramSession $session): TelegramSession
+{
+    $session->update([
+        'state' => null,
+        'payload' => [],
+        'expired_at' => Carbon::now()->addHours(2),
+    ]);
+
+    return $session->refresh();
+}
 }

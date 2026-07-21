@@ -2,19 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\TelegramBotService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Throwable;
 
 class TelegramBotController extends Controller
 {
-    public function webhook(Request $request)
-    {
-        file_put_contents(
-            storage_path('logs/telegram.txt'),
-            json_encode($request->all(), JSON_PRETTY_PRINT)
-        );
+    public function __construct(
+        private readonly TelegramBotService $telegramBotService
+    ) {
+    }
 
-        return response()->json([
-            'ok' => true
-        ]);
+    public function webhook(Request $request): JsonResponse
+    {
+        try {
+
+            $this->telegramBotService->handle(
+                $request->all()
+            );
+
+            return response()->json([
+                'ok' => true,
+            ]);
+
+        } catch (Throwable $exception) {
+
+            report($exception);
+
+            return response()->json([
+                'ok' => false,
+                'message' => $exception->getMessage(),
+            ], 500);
+
+        }
     }
 }

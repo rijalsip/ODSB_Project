@@ -12,22 +12,31 @@ return new class extends Migration
     public function up(): void
 {
     Schema::create('sites', function (Blueprint $table) {
+
         $table->id();
 
         $table->string('site_id')->unique();
-        $table->string('site_name')->nullable();
+        $table->string('site_name');
 
-        $table->string('regional')->nullable();
         $table->string('branch')->nullable();
         $table->string('cluster')->nullable();
-        $table->string('kabupaten')->nullable();
+        $table->string('city')->nullable();
+
+        // Status Site (NON, P1, P2, P3)
+        $table->string('site_focus_mtd')->nullable();
+
         $table->string('kecamatan')->nullable();
-        $table->text('address')->nullable();
 
-        $table->decimal('latitude', 10, 7)->nullable();
-        $table->decimal('longitude', 10, 7)->nullable();
+        $table->string('program')->nullable();
+        $table->string('detail_program_ssgj')->nullable();
 
-        $table->boolean('is_active')->default(true);
+        $table->string('new_infra')->nullable();
+        $table->string('tech')->nullable();
+        $table->string('class')->nullable();
+        $table->string('ne')->nullable();
+
+        $table->string('network_condition')->nullable();
+
         $table->timestamps();
     });
 }

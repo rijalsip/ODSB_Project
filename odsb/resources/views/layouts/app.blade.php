@@ -166,12 +166,17 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-chart-column"></i>
+    <a
+        href="{{ route('report-sales.index') }}"
+        class="nav-link {{
+            request()->routeIs('report-sales.*') ? 'active' : ''
+        }}"
+    >
+        <i class="nav-icon fas fa-chart-column"></i>
 
-                            <p>Selling</p>
-                        </a>
-                    </li>
+        <p>Selling</p>
+    </a>
+</li>
 
                 </ul>
             </nav>

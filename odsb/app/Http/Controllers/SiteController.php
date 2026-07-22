@@ -22,15 +22,26 @@ class SiteController extends Controller
      * Display a listing of the resource.
      */
     public function index(): View
-    {
-        $sites = $this->siteService
-            ->getPaginatedSites();
+{
+    $sites = $this->siteService->getPaginatedSites(
+        request('keyword'),
+        request('status'),
+        request('cluster'),
+        request('per_page', 10)
+    );
 
-        return view(
-            'sites.index',
-            compact('sites')
-        );
-    }
+    $clusters = Site::query()
+        ->select('cluster')
+        ->whereNotNull('cluster')
+        ->distinct()
+        ->orderBy('cluster')
+        ->pluck('cluster');
+
+    return view(
+        'sites.index',
+        compact('sites', 'clusters')
+    );
+}
 
     /**
      * Show the form for creating a new resource.

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Site extends Model
@@ -14,28 +13,19 @@ class Site extends Model
     protected $fillable = [
         'site_id',
         'site_name',
-        'regional',
         'branch',
         'cluster',
-        'kabupaten',
+        'city',
+        'site_focus_mtd',
         'kecamatan',
-        'address',
-        'latitude',
-        'longitude',
-        'is_active',
+        'program',
+        'detail_program_ssgj',
+        'new_infra',
+        'tech',
+        'class',
+        'ne',
+        'network_condition',
     ];
-
-    protected $casts = [
-        'latitude' => 'decimal:7',
-        'longitude' => 'decimal:7',
-        'is_active' => 'boolean',
-    ];
-
-    public function users(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'site_user')
-            ->withTimestamps();
-    }
 
     public function reportSales(): HasMany
     {

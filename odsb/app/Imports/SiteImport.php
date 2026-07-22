@@ -17,18 +17,19 @@ class SiteImport implements ToModel, WithHeadingRow
             ],
 
             [
-                'site_name'  => $row['site_name'] ?? null,
-                'regional'   => $row['regional'] ?? null,
-                'branch'     => $row['branch'] ?? null,
-                'cluster'    => $row['cluster'] ?? null,
-                'kabupaten'  => $row['kabupaten'] ?? null,
-                'kecamatan'  => $row['kecamatan'] ?? null,
-                'address'    => $row['address'] ?? null,
-                'latitude'   => $row['latitude'] ?? null,
-                'longitude'  => $row['longitude'] ?? null,
-                'is_active'  => isset($row['is_active'])
-                    ? (bool) $row['is_active']
-                    : true,
+                'site_name'            => $row['sitename'] ?? null,
+                'branch'               => $row['branch'] ?? null,
+                'cluster'              => $row['cluster'] ?? null,
+                'city'                 => $row['city'] ?? null,
+                'site_focus_mtd'       => $row['site_focus_mtd'] ?? null,
+                'kecamatan'            => $row['kecamatan'] ?? null,
+                'program'              => $row['program'] ?? null,
+                'detail_program_ssgj'  => $row['detail_program_ssgj'] ?? null,
+                'new_infra'            => $row['new_infra'] ?? null,
+                'tech'                 => $row['tech'] ?? null,
+                'class'                => $row['class'] ?? null,
+                'ne'                   => $row['ne'] ?? null,
+                'network_condition'    => $row['network_condition'] ?? null,
             ]
 
         );

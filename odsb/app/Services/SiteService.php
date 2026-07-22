@@ -11,25 +11,71 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class SiteService
 {
-    public function getPaginatedSites(
-        int $perPage = 10
-    ): LengthAwarePaginator {
-        return Site::query()
-            ->latest()
-            ->paginate($perPage);
-    }
+    /**
+     * Menampilkan daftar Site dengan pagination.
+     */
+   public function getPaginatedSites(
+    ?string $keyword = null,
+    ?string $status = null,
+    ?string $cluster = null,
+    int $perPage = 10
+): LengthAwarePaginator {
 
-    public function createSite(array $data): Site
-    {
+    return Site::query()
+
+        ->when($keyword, function ($query) use ($keyword) {
+
+            $query->where(function ($q) use ($keyword) {
+
+                $q->where('site_id', 'like', "%{$keyword}%")
+                  ->orWhere('site_name', 'like', "%{$keyword}%");
+
+            });
+
+        })
+
+        ->when($status, function ($query) use ($status) {
+
+            $query->where('site_focus_mtd', $status);
+
+        })
+
+        ->when($cluster, function ($query) use ($cluster) {
+
+            $query->where('cluster', $cluster);
+
+        })
+
+        ->orderBy('site_id')
+
+        ->paginate($perPage)
+
+        ->withQueryString();
+
+}
+    /**
+     * Menyimpan Site baru.
+     */
+    public function createSite(
+        array $data
+    ): Site {
+
         return DB::transaction(function () use ($data) {
+
             return Site::create($data);
+
         });
+
     }
 
+    /**
+     * Update Site.
+     */
     public function updateSite(
         Site $site,
         array $data
     ): Site {
+
         return DB::transaction(function () use ($site, $data) {
 
             $site->update($data);
@@ -37,8 +83,12 @@ class SiteService
             return $site->refresh();
 
         });
+
     }
 
+    /**
+     * Hapus Site.
+     */
     public function deleteSite(
         Site $site
     ): void {
@@ -51,6 +101,9 @@ class SiteService
 
     }
 
+    /**
+     * Import Site dari Excel.
+     */
     public function importSite(
         UploadedFile $file
     ): void {
@@ -65,26 +118,17 @@ class SiteService
         });
 
     }
+
     /**
- * Cari Site berdasarkan ID.
- */
-/**
- * Cari Site milik User.
- */
-public function findUserSite(
-    int $siteId,
-    int $userId
-): ?Site {
+     * Cari Site berdasarkan Site ID.
+     */
+    public function findBySiteId(
+        string $siteId
+    ): ?Site {
 
-    return Site::query()
-        ->where('id', $siteId)
-        ->where('is_active', true)
-        ->whereHas('users', function ($query) use ($userId) {
+        return Site::query()
+            ->where('site_id', strtoupper(trim($siteId)))
+            ->first();
 
-            $query->where('users.id', $userId);
-
-        })
-        ->first();
-
-}
+    }
 }

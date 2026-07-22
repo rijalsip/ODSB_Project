@@ -3,38 +3,44 @@
 namespace App\Services;
 
 use App\Models\ReportSales;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ReportSalesService
 {
+    public function getPaginatedReports(
+        int $perPage = 10
+    ): LengthAwarePaginator {
+
+        return ReportSales::with([
+                'user',
+                'site'
+            ])
+            ->latest('report_date')
+            ->paginate($perPage);
+
+    }
+
     public function createReport(array $data): ReportSales
     {
-        return DB::transaction(function () use ($data) {
+        return ReportSales::create($data);
+    }
 
-            $data['total_trx'] =
-                $data['renewal_trx'] +
-                $data['voucher_trx'] +
-                $data['sa_sp_trx'] +
-                $data['sa_byu_trx'] +
-                $data['mytelkomsel_trx'] +
-                $data['halo_trx'] +
-                $data['orbit_trx'] +
-                $data['nomor_spesial_trx'] +
-                $data['bogem_trx'];
+    public function updateReport(
+        ReportSales $report,
+        array $data
+    ): ReportSales {
 
-            $data['total_rev'] =
-                $data['renewal_rev'] +
-                $data['voucher_rev'] +
-                $data['sa_sp_rev'] +
-                $data['sa_byu_rev'] +
-                $data['halo_rev'] +
-                $data['orbit_rev'] +
-                $data['nomor_spesial_rev'] +
-                $data['bogem_rev'];
+        $report->update($data);
 
-            $reportSales = ReportSales::create($data);
+        return $report;
 
-            return $reportSales->refresh();
-        });
+    }
+
+    public function deleteReport(
+        ReportSales $report
+    ): void {
+
+        $report->delete();
+
     }
 }

@@ -67,7 +67,86 @@
             </div>
 
         @endif
+<form method="GET" action="{{ route('sites.index') }}" class="mb-3">
 
+    <div class="row">
+
+        <div class="col-md-4">
+            <input
+                type="text"
+                name="keyword"
+                class="form-control"
+                placeholder="Cari Site ID / Site Name..."
+                value="{{ request('keyword') }}">
+        </div>
+
+        <div class="col-md-2">
+            <select name="status" class="form-control">
+                <option value="">Semua Status</option>
+
+                @foreach (['NON', 'P1', 'P2', 'P3'] as $status)
+                    <option value="{{ $status }}"
+                        {{ request('status') == $status ? 'selected' : '' }}>
+                        {{ $status }}
+                    </option>
+                @endforeach
+
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="cluster" class="form-control">
+
+                <option value="">Semua Cluster</option>
+
+                @foreach ($clusters as $cluster)
+
+                    <option
+                        value="{{ $cluster }}"
+                        {{ request('cluster') == $cluster ? 'selected' : '' }}>
+
+                        {{ $cluster }}
+
+                    </option>
+
+                @endforeach
+
+            </select>
+        </div>
+
+        <div class="col-md-1">
+            <select name="per_page" class="form-control">
+
+                @foreach ([10,25,50,100] as $page)
+
+                    <option
+                        value="{{ $page }}"
+                        {{ request('per_page',10) == $page ? 'selected' : '' }}>
+
+                        {{ $page }}
+
+                    </option>
+
+                @endforeach
+
+            </select>
+        </div>
+
+        <div class="col-md-2">
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i> Cari
+            </button>
+
+            <a href="{{ route('sites.index') }}" class="btn btn-secondary">
+                Reset
+            </a>
+
+        </div>
+
+    </div>
+
+</form>
         <table class="table table-bordered table-striped">
 
             <thead>
@@ -86,21 +165,13 @@
                         Site Name
                     </th>
 
-                    <th>
-                        Regional
-                    </th>
-
-                    <th>
-                        Branch
-                    </th>
-
-                    <th>
-                        Cluster
-                    </th>
-
-                    <th width="120">
-                        Status
-                    </th>
+                    <th>Cluster</th>
+<th>City</th>
+<th>Status</th>
+<th>Kecamatan</th>
+<th>Program</th>
+<th>Tech</th>
+<th>Class</th>
 
                     <th width="180">
                         Aksi
@@ -139,41 +210,62 @@
                         </td>
 
                         <td>
+    {{ $site->cluster ?? '-' }}
+</td>
 
-                            {{ $site->regional ?? '-' }}
+<td>
+    {{ $site->city ?? '-' }}
+</td>
 
-                        </td>
+<td>
 
-                        <td>
+    @php
+        $status = strtoupper($site->site_focus_mtd ?? 'NON');
+    @endphp
 
-                            {{ $site->branch ?? '-' }}
+    @if($status == 'P1')
 
-                        </td>
+        <span class="badge badge-danger">
+            P1
+        </span>
 
-                        <td>
+    @elseif($status == 'P2')
 
-                            {{ $site->cluster ?? '-' }}
+        <span class="badge badge-warning">
+            P2
+        </span>
 
-                        </td>
+    @elseif($status == 'P3')
 
-                        <td>
+        <span class="badge badge-info">
+            P3
+        </span>
 
-                            @if($site->is_active)
+    @else
 
-                                <span class="badge badge-success">
-                                    Aktif
-                                </span>
+        <span class="badge badge-secondary">
+            NON
+        </span>
 
-                            @else
+    @endif
 
-                                <span class="badge badge-danger">
-                                    Tidak Aktif
-                                </span>
+</td>
 
-                            @endif
+<td>
+    {{ $site->kecamatan ?? '-' }}
+</td>
 
-                        </td>
+<td>
+    {{ $site->program ?? '-' }}
+</td>
 
+<td>
+    {{ $site->tech ?? '-' }}
+</td>
+
+<td>
+    {{ $site->class ?? '-' }}
+</td>
                         <td>
 
                             <a
@@ -213,7 +305,7 @@
                     <tr>
 
                         <td
-                            colspan="8"
+                            colspan="10"
                             class="text-center">
 
                             Belum ada data Site.

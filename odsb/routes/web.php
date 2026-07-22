@@ -6,11 +6,14 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TelegramBotController;
+use App\Http\Controllers\ReportSalesController;
 
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
+Route::resource('report-sales', ReportSalesController::class)
+    ->only(['index']);
 /*
 |--------------------------------------------------------------------------
 | Authentication

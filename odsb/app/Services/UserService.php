@@ -120,4 +120,11 @@ class UserService
             ->orderBy('site_name')
             ->get();
     }
+    public function unbindTelegram(User $user): void
+{
+    $user->update([
+        'telegram_chat_id' => null,
+        'telegram_username' => null,
+    ]);
+}
 }

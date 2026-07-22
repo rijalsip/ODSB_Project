@@ -7,93 +7,58 @@ use Illuminate\Validation\Rule;
 
 class UpdateSiteRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     */
     public function authorize(): bool
     {
         return true;
     }
 
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'is_active' => $this->boolean('is_active'),
-        ]);
-    }
-
+    /**
+     * Validation Rules
+     */
     public function rules(): array
     {
         return [
-            'site_id' => [
-                'required',
-                'string',
-                'max:100',
-                Rule::unique('sites', 'site_id')
-                    ->ignore($this->route('site')),
-            ],
 
-            'site_name' => [
-                'nullable',
+            'site_id' => [
+
+                'required',
                 'string',
                 'max:255',
+
+                Rule::unique('sites', 'site_id')
+                    ->ignore($this->site),
+
             ],
 
-            'regional' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
+            'site_name' => 'required|string|max:255',
 
-            'branch' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
+            'branch' => 'nullable|string|max:255',
 
-            'cluster' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
+            'cluster' => 'nullable|string|max:255',
 
-            'kabupaten' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
+            'city' => 'nullable|string|max:255',
 
-            'kecamatan' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
+            'site_focus_mtd' => 'nullable|string|max:255',
 
-            'address' => [
-                'nullable',
-                'string',
-            ],
+            'kecamatan' => 'nullable|string|max:255',
 
-            'latitude' => [
-                'nullable',
-                'numeric',
-            ],
+            'program' => 'nullable|string|max:255',
 
-            'longitude' => [
-                'nullable',
-                'numeric',
-            ],
+            'detail_program_ssgj' => 'nullable|string|max:255',
 
-            'is_active' => [
-                'required',
-                'boolean',
-            ],
-        ];
-    }
+            'new_infra' => 'nullable|string|max:255',
 
-    public function messages(): array
-    {
-        return [
-            'site_id.required' => 'Site ID wajib diisi.',
-            'site_id.unique' => 'Site ID sudah digunakan.',
-            'site_id.max' => 'Site ID maksimal 100 karakter.',
+            'tech' => 'nullable|string|max:255',
+
+            'class' => 'nullable|string|max:255',
+
+            'ne' => 'nullable|string|max:255',
+
+            'network_condition' => 'nullable|string|max:255',
+
         ];
     }
 }

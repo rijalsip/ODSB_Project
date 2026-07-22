@@ -38,38 +38,27 @@ class TelegramBotService
 
         if ($text === '/start') {
 
-            $user = $this->userService
-                ->findByTelegramChatId($chatId);
+    $this->telegramSessionService->resetSession($session);
 
-            if ($user) {
+    $this->telegramSessionService->updateState(
+        $session,
+        'waiting_username'
+    );
 
     Telegram::sendMessage([
         'chat_id' => $chatId,
         'text' =>
-            "Halo {$user->name} 👋\n\n" .
-            "✅ Akun Telegram Anda sudah terhubung.\n\n" .
-            "📖 Bingung cara menggunakan bot?\n" .
-            "Ketik /help untuk melihat panduan penggunaan."
+            "👋 Selamat datang di *ODSB Sales Monitoring Bot*\n\n" .
+            "Bot ini digunakan untuk mengirim laporan penjualan Site.\n\n" .
+            "📖 Ketik /help untuk melihat panduan penggunaan.\n\n" .
+            "Silakan masukkan *Username* Anda.",
+        'parse_mode' => 'Markdown',
     ]);
 
     return;
 }
 
-            $this->telegramSessionService
-                ->updateState($session, 'waiting_username');
-
-            Telegram::sendMessage([
-    'chat_id' => $chatId,
-    'text' =>
-        "👋 Selamat datang di *ODSB Sales Monitoring Bot*\n\n" .
-        "Bot ini digunakan untuk mengirim laporan penjualan Site.\n\n" .
-        "📖 Ketik /help untuk melihat panduan penggunaan.\n\n" .
-        "Silakan masukkan *Username* Anda.",
-    'parse_mode' => 'Markdown',
-]);
-
-            return;
-        }
+         
 /*
 |--------------------------------------------------------------------------
 | HELP
@@ -154,7 +143,20 @@ case 'waiting_username':
 
         return;
     }
+$existingUser = $this->userService->findByTelegramChatId($chatId);
 
+if ($existingUser && $existingUser->id !== $user->id) {
+
+    Telegram::sendMessage([
+        'chat_id' => $chatId,
+        'text' =>
+            "❌ Akun Telegram ini sudah terhubung ke username *{$existingUser->username}*.\n\n" .
+            "Gunakan akun Telegram yang sesuai atau hubungi administrator.",
+        'parse_mode' => 'Markdown',
+    ]);
+
+    return;
+}
     $this->userService->bindTelegram(
         $user,
         $chatId,
@@ -274,25 +276,81 @@ case 'waiting_username':
 
     $this->reportSalesService->createReport($report);
 
+$this->telegramSessionService->updateState(
+    $session,
+    'waiting_next_action'
+);
+
+$keyboard = Keyboard::make()
+    ->setResizeKeyboard(true)
+    ->setOneTimeKeyboard(false)
+    ->row([
+        Keyboard::button([
+            'text' => '📍 Site Lain'
+        ])
+    ])
+    ->row([
+        Keyboard::button([
+            'text' => '✅ Selesai'
+        ])
+    ]);
+
 Telegram::sendMessage([
     'chat_id' => $chatId,
     'text' =>
         "✅ Report berhasil disimpan.\n\n" .
-        "🏢 Site : {$payload['site_code']} - {$payload['site_name']}\n" .
-        "📅 Tanggal : " . now()->format('d-m-Y') . "\n\n" .
-        "📊 Total TRX : {$report['total_trx']}\n" .
-        "💰 Total REV : Rp " . number_format($report['total_rev'], 0, ',', '.') .
-        "\n\n━━━━━━━━━━━━━━━\n" .
-        "🔒 Anda telah logout.\n\n" .
-        "Untuk membuat laporan baru,\nketik /start."
+        "📍 Site : {$payload['site_code']} - {$payload['site_name']}\n" .
+        "📅 Tanggal : {$report['report_date']}\n\n" .
+        "Silakan pilih tindakan berikutnya.",
+
+    'reply_markup' => $keyboard
+]);
+return;
+case 'waiting_next_action':
+
+    if ($text === '📍 Site Lain') {
+
+        $this->telegramSessionService->updateState(
+            $session,
+            'waiting_site_id'
+        );
+
+        $keyboard = Keyboard::remove();
+
+Telegram::sendMessage([
+    'chat_id' => $chatId,
+    'text' => "📍 Silakan masukkan Site ID berikutnya.",
+    'reply_markup' => $keyboard,
 ]);
 
-$this->userService->unbindTelegram($user);
+        return;
+    }
 
-$this->telegramSessionService->resetSession($session);
+    if ($text === '✅ Selesai') {
 
-return;
+        $this->telegramSessionService->resetSession($session);
 
+        Telegram::sendMessage([
+            'chat_id' => $chatId,
+            'text' =>
+                "👋 Terima kasih.\n\n" .
+                "Session telah selesai.\n\n" .
+                "Ketik /start jika ingin membuat laporan lagi."
+        ]);
+
+        return;
+    }
+
+    Telegram::sendMessage([
+        'chat_id' => $chatId,
+        'text' =>
+            "❌ Pilihan tidak valid.\n\n" .
+            "Kirim:\n" .
+            "1 = Site lain\n" .
+            "2 = Selesai"
+    ]);
+
+    return;
             default:
 
                 Telegram::sendMessage([

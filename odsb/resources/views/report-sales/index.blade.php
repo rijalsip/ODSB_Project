@@ -73,22 +73,42 @@
             </select>
         </div>
 
-        <!-- Tombol Cari -->
+        <!-- Cari -->
         <div class="col-md-2">
-            <button class="btn btn-primary w-100">
-                🔍 Cari
+            <button class="btn btn-primary btn-block">
+                <i class="fas fa-search"></i>
+                Cari
             </button>
         </div>
 
-        <!-- Tombol Reset -->
+        <!-- Reset -->
         <div class="col-md-2">
             <a
                 href="{{ route('report-sales.index') }}"
-                class="btn btn-secondary w-100">
+                class="btn btn-secondary btn-block">
 
+                <i class="fas fa-sync"></i>
                 Reset
 
             </a>
+        </div>
+
+    </div>
+
+    <div class="row mt-2">
+
+        <div class="col-md-12 text-right">
+
+            <a
+                href="{{ route('report-sales.export', request()->query()) }}"
+                class="btn btn-success">
+
+                <i class="fas fa-file-excel"></i>
+
+                Export Excel
+
+            </a>
+
         </div>
 
     </div>

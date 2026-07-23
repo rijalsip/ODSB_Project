@@ -40,7 +40,10 @@ Route::resource('report-sales', ReportSalesController::class)
     ->only(['index']);
 
 Route::resource('report-sales', ReportSalesController::class)
-    ->only(['index']);
+    ->only([
+        'index',
+        'show',
+    ]);
 /*
 |--------------------------------------------------------------------------
 | Authentication

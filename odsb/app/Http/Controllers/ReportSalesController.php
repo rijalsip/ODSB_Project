@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ReportSales;
+use App\Models\User;
 use App\Services\ReportSalesService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\User;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ReportSalesController extends Controller
 {
@@ -14,28 +15,41 @@ class ReportSalesController extends Controller
         protected ReportSalesService $reportSalesService
     ) {}
 
+    /**
+     * Display a listing of reports.
+     */
     public function index(Request $request): View
-{
-    $reports = $this->reportSalesService
-        ->getPaginatedReports(
-            $request->all()
+    {
+        $reports = $this->reportSalesService
+            ->getPaginatedReports($request->all());
+
+        $users = User::orderBy('name')->get();
+
+        return view(
+            'report-sales.index',
+            compact('reports', 'users')
         );
+    }
 
-    $users = User::orderBy('name')->get();
+    /**
+     * Display report detail.
+     */
+    public function show(int $id): View
+    {
+        $report = ReportSales::with([
+            'user',
+            'site',
+        ])->find($id);
 
-    return view(
-        'report-sales.index',
-        compact('reports', 'users')
-    );
-}
-public function export(
-    Request $request
-): BinaryFileResponse {
+        if (!$report) {
+            throw new NotFoundHttpException(
+                'Report tidak ditemukan.'
+            );
+        }
 
-    return $this->reportSalesService
-        ->exportReportSales(
-            $request->all()
+        return view(
+            'report-sales.show',
+            compact('report')
         );
-
-}
+    }
 }

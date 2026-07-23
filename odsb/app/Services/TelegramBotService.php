@@ -411,9 +411,11 @@ case 'waiting_photo':
 
     $filePath = $file->filePath;
 
-   $token = env('8291583866:AAGchTEYmfkxKt6eG9Ev1SX90ac3YrKOoq8');
+   $token = env('TELEGRAM_BOT_TOKEN');
 
     $url = "https://api.telegram.org/file/bot{$token}/{$filePath}";
+
+    
 
     $contents = Http::get($url)->body();
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TelegramBotController;
 use App\Http\Controllers\ReportSalesController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -44,9 +45,8 @@ Route::post('/telegram/webhook', [TelegramBotController::class, 'webhook'])
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('dashboard.index');
-    })->name('dashboard');
+   Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard');
 
     /*
     |--------------------------------------------------------------------------

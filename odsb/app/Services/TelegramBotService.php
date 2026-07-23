@@ -229,9 +229,8 @@ if ($existingUser && $existingUser->id !== $user->id) {
             "orbit_trx: 0\n" .
             "orbit_rev: 0\n" .
             "nomor_spesial_trx: 0\n" .
-            "nomor_spesial_rev: 0\n" .
-            "bogem_trx: 0\n" .
-            "bogem_rev: 0"
+            "nomor_spesial_rev: 0\n" 
+
     ]);
 
     return;

@@ -38,9 +38,6 @@ class ReportSales extends Model
         'nomor_spesial_trx',
         'nomor_spesial_rev',
 
-        'bogem_trx',
-        'bogem_rev',
-
         'total_trx',
         'total_rev',
     ];

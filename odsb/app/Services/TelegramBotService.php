@@ -4,6 +4,9 @@ namespace App\Services;
 
 use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Laravel\Facades\Telegram;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use App\Models\ReportSales;
 
 class TelegramBotService
 {
@@ -273,26 +276,19 @@ if ($existingUser && $existingUser->id !== $user->id) {
     $report['site_id'] = $payload['site_id'];
     $report['report_date'] = now()->toDateString();
 
-    $this->reportSalesService->createReport($report);
+   $reportSales = $this->reportSalesService->createReport($report);
+
+$payload['report_id'] = $reportSales->id;
+
+$this->telegramSessionService->updatePayload(
+    $session,
+    $payload
+);
 
 $this->telegramSessionService->updateState(
     $session,
-    'waiting_next_action'
+    'waiting_market_insight'
 );
-
-$keyboard = Keyboard::make()
-    ->setResizeKeyboard(true)
-    ->setOneTimeKeyboard(false)
-    ->row([
-        Keyboard::button([
-            'text' => '📍 Site Lain'
-        ])
-    ])
-    ->row([
-        Keyboard::button([
-            'text' => '✅ Selesai'
-        ])
-    ]);
 
 Telegram::sendMessage([
     'chat_id' => $chatId,
@@ -300,11 +296,149 @@ Telegram::sendMessage([
         "✅ Report berhasil disimpan.\n\n" .
         "📍 Site : {$payload['site_code']} - {$payload['site_name']}\n" .
         "📅 Tanggal : {$report['report_date']}\n\n" .
-        "Silakan pilih tindakan berikutnya.",
-
-    'reply_markup' => $keyboard
+        "📝 Silakan masukkan *Market Insight*.",
+    'parse_mode' => 'Markdown',
 ]);
+
 return;
+
+case 'waiting_market_insight':
+
+    $payload = $session->payload;
+
+    $payload['market_insight'] = $text;
+
+    $this->telegramSessionService->updatePayload(
+        $session,
+        $payload
+    );
+
+    $this->telegramSessionService->updateState(
+        $session,
+        'waiting_photo'
+    );
+
+    $keyboard = Keyboard::make()
+    ->setResizeKeyboard(true)
+    ->setOneTimeKeyboard(false)
+    ->row([
+        Keyboard::button([
+            'text' => '✅ Selesai Upload'
+        ])
+    ]);
+
+   Telegram::sendMessage([
+    'chat_id' => $chatId,
+    'text' =>
+        "✅ Market Insight diterima.\n\n" .
+        "📸 Silakan kirim Foto Activity.\n\n" .
+        "Anda dapat mengirim lebih dari satu foto.\n\n" .
+        "Tekan tombol *✅ Selesai Upload* jika sudah selesai.",
+    'parse_mode' => 'Markdown',
+    'reply_markup' => $keyboard,
+]);
+
+    return;
+case 'waiting_photo':
+
+    $payload = $session->payload;
+
+    // Jika user selesai upload
+    if ($text === '✅ Selesai Upload') {
+
+        $report = ReportSales::find($payload['report_id']);
+
+        $this->reportSalesService->updateReport(
+            $report,
+            [
+                'market_insight' => $payload['market_insight'],
+                'foto_activity' => json_encode(
+                    $payload['photos'] ?? []
+                ),
+            ]
+        );
+
+        $this->telegramSessionService->updateState(
+            $session,
+            'waiting_next_action'
+        );
+
+        $keyboard = Keyboard::make()
+            ->setResizeKeyboard(true)
+            ->setOneTimeKeyboard(false)
+            ->row([
+                Keyboard::button([
+                    'text' => '📍 Site Lain'
+                ])
+            ])
+            ->row([
+                Keyboard::button([
+                    'text' => '✅ Selesai'
+                ])
+            ]);
+
+        Telegram::sendMessage([
+            'chat_id' => $chatId,
+            'text' =>
+                "✅ Foto berhasil disimpan.\n\n" .
+                "Silakan pilih tindakan berikutnya.",
+            'reply_markup' => $keyboard,
+        ]);
+
+        return;
+    }
+
+    // Jika bukan foto
+    if (!isset($update['message']['photo'])) {
+
+        Telegram::sendMessage([
+            'chat_id' => $chatId,
+            'text' =>
+                "📸 Silakan kirim foto.\n\n" .
+                "Jika sudah selesai tekan tombol ✅ Selesai Upload."
+        ]);
+
+        return;
+    }
+
+    $photos = $update['message']['photo'];
+
+    $largestPhoto = end($photos);
+
+    $file = Telegram::getFile([
+        'file_id' => $largestPhoto['file_id']
+    ]);
+
+    $filePath = $file->filePath;
+
+   $token = env('8291583866:AAGchTEYmfkxKt6eG9Ev1SX90ac3YrKOoq8');
+
+    $url = "https://api.telegram.org/file/bot{$token}/{$filePath}";
+
+    $contents = Http::get($url)->body();
+
+    $filename = 'activity/' . uniqid() . '.jpg';
+
+    Storage::disk('public')->put(
+        $filename,
+        $contents
+    );
+
+    $payload['photos'][] = $filename;
+
+    $this->telegramSessionService->updatePayload(
+        $session,
+        $payload
+    );
+
+    Telegram::sendMessage([
+        'chat_id' => $chatId,
+        'text' =>
+            "✅ Foto berhasil diterima.\n\n" .
+            "Silakan kirim foto lagi atau tekan ✅ Selesai Upload."
+    ]);
+
+    return;
 case 'waiting_next_action':
 
     if ($text === '📍 Site Lain') {

@@ -40,6 +40,9 @@ class ReportSales extends Model
 
         'total_trx',
         'total_rev',
+
+        'market_insight',
+        'foto_activity',
     ];
 
     protected function casts(): array

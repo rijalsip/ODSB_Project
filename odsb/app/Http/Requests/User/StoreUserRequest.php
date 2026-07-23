@@ -39,11 +39,18 @@ class StoreUserRequest extends FormRequest
                 'unique:users,username',
             ],
 
-            'email' => [
-                'required',
-                'email',
-                'unique:users,email',
-            ],
+           'id_digipos' => [
+    'nullable',
+    'string',
+    'max:255',
+    'unique:users,id_digipos',
+],
+
+'cluster' => [
+    'required',
+    'string',
+    'max:100',
+],
 
             'phone' => [
                 'nullable',
@@ -80,9 +87,9 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name.required' => 'Nama wajib diisi.',
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email sudah digunakan.',
+           'id_digipos.required' => 'ID Digipos wajib diisi.',
+'id_digipos.unique' => 'ID Digipos sudah digunakan.',
+'cluster.required' => 'Cluster wajib diisi.',
             'username.unique' => 'Username sudah digunakan.',
             'telegram_chat_id.unique' => 'Telegram Chat ID sudah digunakan.',
             'password.required' => 'Password wajib diisi.',

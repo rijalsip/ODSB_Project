@@ -73,11 +73,8 @@ $totals = [
     'U' => $this->reports->sum('nomor_spesial_trx'),
     'V' => $this->reports->sum('nomor_spesial_rev'),
 
-    'W' => $this->reports->sum('bogem_trx'),
-    'X' => $this->reports->sum('bogem_rev'),
-
-    'Y' => $this->reports->sum('total_trx'),
-    'Z' => $this->reports->sum('total_rev'),
+    'W' => $this->reports->sum('total_trx'),
+    'X' => $this->reports->sum('total_rev'),
 
 ];
 
@@ -102,7 +99,7 @@ $sheet->getStyle("A{$totalRow}:{$lastColumn}{$totalRow}")
     ->getFill()
     ->getStartColor()
     ->setRGB('FFF2CC');
-    
+
             // Tinggi Header
             $sheet->getRowDimension(1)->setRowHeight(25);
 
@@ -165,9 +162,6 @@ $sheet->getStyle("A{$totalRow}:{$lastColumn}{$totalRow}")
                 'Nomor Spesial TRX' => $report->nomor_spesial_trx,
                 'Nomor Spesial REV' => $report->nomor_spesial_rev,
 
-                'Bogem TRX' => $report->bogem_trx,
-                'Bogem REV' => $report->bogem_rev,
-
                 'Total TRX' => $report->total_trx,
                 'Total REV' => $report->total_rev,
 
@@ -211,9 +205,6 @@ $sheet->getStyle("A{$totalRow}:{$lastColumn}{$totalRow}")
 
             'Nomor Spesial TRX',
             'Nomor Spesial REV',
-
-            'Bogem TRX',
-            'Bogem REV',
 
             'Total TRX',
             'Total REV',

@@ -9,9 +9,20 @@ use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Http\Requests\User\ImportUserRequest;
+use App\Imports\UserImport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UserTemplateExport;
 
 class UserController extends Controller
 {
+    public function downloadTemplate()
+{
+    return Excel::download(
+        new UserTemplateExport(),
+        'template_import_user.xlsx'
+    );
+}
     public function __construct(
         private readonly UserService $userService
     ) {
@@ -49,6 +60,23 @@ class UserController extends Controller
                 'User berhasil ditambahkan.'
             );
     }
+ 
+    public function import(
+    ImportUserRequest $request
+): RedirectResponse {
+
+    Excel::import(
+        new UserImport(),
+        $request->file('file')
+    );
+
+    return redirect()
+        ->route('users.index')
+        ->with(
+            'success',
+            'Import user berhasil dilakukan. Password default seluruh user adalah Telkomsel@123.'
+        );
+}
 
     public function edit(
         User $user

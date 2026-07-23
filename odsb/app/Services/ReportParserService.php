@@ -23,8 +23,7 @@ class ReportParserService
         'orbit_rev',
         'nomor_spesial_trx',
         'nomor_spesial_rev',
-        'bogem_trx',
-        'bogem_rev',
+
     ];
 
     public function parse(string $text): array
@@ -97,8 +96,8 @@ class ReportParserService
             + $data['mytelkomsel_trx']
             + $data['halo_trx']
             + $data['orbit_trx']
-            + $data['nomor_spesial_trx']
-            + $data['bogem_trx'];
+            + $data['nomor_spesial_trx'];
+
 
         $data['total_rev'] =
             $data['renewal_rev']
@@ -107,8 +106,8 @@ class ReportParserService
             + $data['sa_byu_rev']
             + $data['halo_rev']
             + $data['orbit_rev']
-            + $data['nomor_spesial_rev']
-            + $data['bogem_rev'];
+            + $data['nomor_spesial_rev'];
+
 
         return [
             'success' => true,

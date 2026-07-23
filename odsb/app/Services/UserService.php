@@ -18,24 +18,32 @@ class UserService
     }
 
     public function createUser(array $data): User
-    {
-        return DB::transaction(function () use ($data) {
-            return User::create($data);
-        });
-    }
+{
+    return DB::transaction(function () use ($data) {
+
+        $data['email'] = $data['id_digipos'] . '@digipos.local';
+
+        return User::create($data);
+
+    });
+}
 
     public function updateUser(
-        User $user,
-        array $data
-    ): User {
-        return DB::transaction(function () use ($user, $data) {
+    User $user,
+    array $data
+): User {
 
-            $user->update($data);
+    return DB::transaction(function () use ($user, $data) {
 
-            return $user->refresh();
+        $data['email'] = $data['id_digipos'] . '@digipos.local';
 
-        });
-    }
+        $user->update($data);
+
+        return $user->refresh();
+
+    });
+
+}
 
     public function deleteUser(User $user): void
     {

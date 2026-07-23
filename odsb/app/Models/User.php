@@ -15,16 +15,18 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'role_id',
-        'name',
-        'username',
-        'email',
-        'phone',
-        'telegram_chat_id',
-        'telegram_username',
-        'password',
-        'is_active',
-    ];
+    'role_id',
+    'name',
+    'username',
+    'id_digipos',
+    'cluster',
+    'email',
+    'phone',
+    'telegram_chat_id',
+    'telegram_username',
+    'password',
+    'is_active',
+];
 
     protected $hidden = [
         'password',

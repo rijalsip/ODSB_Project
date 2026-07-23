@@ -56,9 +56,11 @@
                     </th>
 
                     <th>
-                        Email
+                        ID Digipos
                     </th>
-
+                    <th>
+    Cluster
+</th>
                     <th>
                         Role
                     </th>
@@ -94,8 +96,12 @@
                         </td>
 
                         <td>
-                            {{ $user->email }}
-                        </td>
+    {{ $user->id_digipos ?? '-' }}
+</td>
+
+<td>
+    {{ $user->cluster ?? '-' }}
+</td>
 
                         <td>
                             {{ $user->role->name ?? '-' }}
@@ -155,7 +161,7 @@
                     <tr>
 
                         <td
-                            colspan="7"
+                            colspan="8"
                             class="text-center"
                         >
                             Data tidak tersedia

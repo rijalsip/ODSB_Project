@@ -63,17 +63,35 @@
 </div>
 
 <div class="form-group">
-    <label>Email</label>
+    <label>ID Digipos</label>
 
     <input
-        type="email"
-        name="email"
-        class="form-control @error('email') is-invalid @enderror"
-        value="{{ old('email', $user->email ?? '') }}"
-        placeholder="Masukkan email"
+        type="text"
+        name="id_digipos"
+        class="form-control @error('id_digipos') is-invalid @enderror"
+        value="{{ old('id_digipos', $user->id_digipos ?? '') }}"
+        placeholder="Masukkan ID Digipos"
     >
 
-    @error('email')
+    @error('id_digipos')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
+</div>
+
+<div class="form-group">
+    <label>Cluster</label>
+
+    <input
+        type="text"
+        name="cluster"
+        class="form-control @error('cluster') is-invalid @enderror"
+        value="{{ old('cluster', $user->cluster ?? '') }}"
+        placeholder="Masukkan Cluster"
+    >
+
+    @error('cluster')
         <div class="invalid-feedback">
             {{ $message }}
         </div>

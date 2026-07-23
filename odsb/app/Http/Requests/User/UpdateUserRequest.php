@@ -41,12 +41,19 @@ class UpdateUserRequest extends FormRequest
                     ->ignore($this->route('user')),
             ],
 
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('users', 'email')
-                    ->ignore($this->route('user')),
-            ],
+           'id_digipos' => [
+    'required',
+    'string',
+    'max:100',
+    Rule::unique('users', 'id_digipos')
+        ->ignore($this->route('user')),
+],
+
+'cluster' => [
+    'required',
+    'string',
+    'max:100',
+],
 
             'phone' => [
                 'nullable',
@@ -83,9 +90,9 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name.required' => 'Nama wajib diisi.',
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email sudah digunakan.',
+            'id_digipos.required' => 'ID Digipos wajib diisi.',
+'id_digipos.unique' => 'ID Digipos sudah digunakan.',
+'cluster.required' => 'Cluster wajib diisi.',
             'username.unique' => 'Username sudah digunakan.',
             'telegram_chat_id.unique' => 'Telegram Chat ID sudah digunakan.',
             

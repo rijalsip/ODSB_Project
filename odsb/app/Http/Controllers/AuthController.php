@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -30,8 +31,24 @@ class AuthController extends Controller
                 ]);
         }
 
-        return redirect()->route('dashboard')
-            ->with('success', 'Login berhasil.');
+        $user = Auth::user();
+$user = Auth::user();
+
+if ($user->role && $user->role->name === 'Direct Sales') {
+
+    return redirect()
+        ->route('report-sales.index')
+        ->with('success', 'Login berhasil.');
+
+}
+
+return redirect()
+    ->route('dashboard')
+    ->with('success', 'Login berhasil.');
+
+return redirect()
+    ->route('dashboard')
+    ->with('success', 'Login berhasil.');
     }
 
     public function logout(Request $request)

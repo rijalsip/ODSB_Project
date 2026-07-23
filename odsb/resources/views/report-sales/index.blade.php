@@ -107,6 +107,7 @@
                     <th>Site Name</th>
                     <th>Total TRX</th>
                     <th>Total REV</th>
+<th width="100">Action</th>
 
                 </tr>
 
@@ -160,9 +161,22 @@
 
                         <td>
 
-                            Rp {{ number_format($report->total_rev) }}
+    Rp {{ number_format($report->total_rev) }}
 
-                        </td>
+</td>
+
+<td class="text-center">
+
+    <a
+        href="{{ route('report-sales.show', $report->id) }}"
+        class="btn btn-info btn-sm">
+
+        <i class="fas fa-eye"></i>
+
+    </a>
+
+</td>
+                        
 
                     </tr>
 
@@ -170,7 +184,7 @@
 
                     <tr>
 
-                        <td colspan="7" class="text-center">
+                        <td colspan="8" class="text-center">
 
                             Belum ada laporan.
 

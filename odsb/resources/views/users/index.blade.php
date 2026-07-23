@@ -20,19 +20,35 @@
             Data User
         </h3>
 
-        <div class="card-tools">
+       <div class="card-tools">
 
-            <a
-                href="{{ route('users.create') }}"
-                class="btn btn-primary btn-sm"
-            >
-                <i class="fas fa-plus"></i>
+    <a
+        href="{{ route('users.template') }}"
+        class="btn btn-info btn-sm"
+    >
+        <i class="fas fa-download"></i>
+        Download Template
+    </a>
 
-                Tambah User
-            </a>
+    <button
+        type="button"
+        class="btn btn-success btn-sm"
+        data-toggle="modal"
+        data-target="#importUserModal"
+    >
+        <i class="fas fa-file-excel"></i>
+        Import User
+    </button>
 
-        </div>
+    <a
+        href="{{ route('users.create') }}"
+        class="btn btn-primary btn-sm"
+    >
+        <i class="fas fa-plus"></i>
+        Tambah User
+    </a>
 
+</div>
     </div>
 
     <div class="card-body table-responsive p-0">
@@ -56,9 +72,11 @@
                     </th>
 
                     <th>
-                        Email
+                        ID Digipos
                     </th>
-
+                    <th>
+    Cluster
+</th>
                     <th>
                         Role
                     </th>
@@ -94,8 +112,12 @@
                         </td>
 
                         <td>
-                            {{ $user->email }}
-                        </td>
+    {{ $user->id_digipos ?? '-' }}
+</td>
+
+<td>
+    {{ $user->cluster ?? '-' }}
+</td>
 
                         <td>
                             {{ $user->role->name ?? '-' }}
@@ -155,7 +177,7 @@
                     <tr>
 
                         <td
-                            colspan="7"
+                            colspan="8"
                             class="text-center"
                         >
                             Data tidak tersedia
@@ -179,4 +201,102 @@
 
 </div>
 
+<div
+    class="modal fade"
+    id="importUserModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <form
+                action="{{ route('users.import') }}"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                @csrf
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Import User
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                    >
+                        <span>&times;</span>
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+
+                        <label>
+                            File Excel
+                        </label>
+
+                        <input
+                            type="file"
+                            name="file"
+                            class="form-control @error('file') is-invalid @enderror"
+                            accept=".xlsx,.xls,.csv"
+                            required
+                        >
+
+                        @error('file')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+
+                    </div>
+
+                    <small class="text-muted">
+
+                        Format yang didukung:
+
+                        <strong>
+                            .xlsx, .xls, .csv
+                        </strong>
+
+                    </small>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal"
+                    >
+                        Batal
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-success"
+                    >
+                        <i class="fas fa-upload"></i>
+
+                        Import
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
 @endsection

@@ -9,6 +9,24 @@ use App\Http\Controllers\TelegramBotController;
 use App\Http\Controllers\ReportSalesController;
 use App\Http\Controllers\DashboardController;
 
+
+Route::get(
+    '/users/template',
+    [UserController::class, 'downloadTemplate']
+)->name('users.template');
+
+Route::post(
+    '/users/import',
+    [UserController::class, 'import']
+)->name('users.import');
+
+Route::resource('users', UserController::class);
+
+Route::post(
+    '/users/import',
+    [UserController::class, 'import']
+)->name('users.import');
+
 Route::get('/', function () {
     return redirect()->route('login');
 });

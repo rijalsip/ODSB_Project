@@ -42,11 +42,10 @@ class UpdateUserRequest extends FormRequest
             ],
 
            'id_digipos' => [
-    'required',
+    'nullable',
     'string',
-    'max:100',
-    Rule::unique('users', 'id_digipos')
-        ->ignore($this->route('user')),
+    'max:255',
+    Rule::unique('users', 'id_digipos')->ignore($this->user),
 ],
 
 'cluster' => [

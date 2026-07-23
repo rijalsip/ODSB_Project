@@ -39,10 +39,10 @@ class StoreUserRequest extends FormRequest
                 'unique:users,username',
             ],
 
-            'id_digipos' => [
-    'required',
+           'id_digipos' => [
+    'nullable',
     'string',
-    'max:100',
+    'max:255',
     'unique:users,id_digipos',
 ],
 

@@ -21,8 +21,9 @@ class UserService
 {
     return DB::transaction(function () use ($data) {
 
-        $data['email'] = $data['id_digipos'] . '@digipos.local';
-
+       $data['email'] = !empty($data['id_digipos'])
+    ? $data['id_digipos'] . '@digipos.local'
+    : $data['username'] . '@digipos.local';
         return User::create($data);
 
     });
@@ -35,7 +36,9 @@ class UserService
 
     return DB::transaction(function () use ($user, $data) {
 
-        $data['email'] = $data['id_digipos'] . '@digipos.local';
+        $data['email'] = !empty($data['id_digipos'])
+    ? $data['id_digipos'] . '@digipos.local'
+    : $data['username'] . '@digipos.local';
 
         $user->update($data);
 

@@ -12,6 +12,14 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+Route::get(
+    'report-sales/export',
+    [ReportSalesController::class, 'export']
+)->name('report-sales.export');
+
+Route::resource('report-sales', ReportSalesController::class)
+    ->only(['index']);
+
 Route::resource('report-sales', ReportSalesController::class)
     ->only(['index']);
 /*

@@ -61,8 +61,4 @@ class ReportSales extends Model
     {
         return $this->belongsTo(Site::class);
     }
-    public function reportSales(): HasMany
-{
-    return $this->hasMany(ReportSales::class);
-}
 }

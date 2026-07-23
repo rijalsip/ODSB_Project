@@ -6,6 +6,7 @@ use App\Services\ReportSalesService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\User;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ReportSalesController extends Controller
 {
@@ -26,5 +27,15 @@ class ReportSalesController extends Controller
         'report-sales.index',
         compact('reports', 'users')
     );
+}
+public function export(
+    Request $request
+): BinaryFileResponse {
+
+    return $this->reportSalesService
+        ->exportReportSales(
+            $request->all()
+        );
+
 }
 }

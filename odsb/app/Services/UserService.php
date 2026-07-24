@@ -8,14 +8,31 @@ use Illuminate\Support\Facades\DB;
 
 class UserService
 {
-    public function getPaginatedUsers(
-        int $perPage = 10
-    ): LengthAwarePaginator {
-        return User::query()
-            ->with('role')
-            ->latest()
-            ->paginate($perPage);
-    }
+   public function getPaginatedUsers(
+    ?string $search = null,
+    int $perPage = 10
+): LengthAwarePaginator {
+
+    return User::query()
+        ->with('role')
+
+        ->when($search, function ($query) use ($search) {
+
+            $query->where(
+                'username',
+                'like',
+                '%' . $search . '%'
+            );
+
+        })
+
+        ->latest()
+
+        ->paginate($perPage)
+
+        ->withQueryString();
+
+}
 
     public function createUser(array $data): User
 {

@@ -32,6 +32,15 @@ class ReportSalesController extends Controller
     }
 
     /**
+     * Export Report Sales ke Excel.
+     */
+    public function export(Request $request)
+    {
+        return $this->reportSalesService
+            ->exportReportSales($request->all());
+    }
+
+    /**
      * Display report detail.
      */
     public function show(int $id): View

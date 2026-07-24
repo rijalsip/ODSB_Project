@@ -14,18 +14,35 @@
 
 <div class="card">
 
-    <div class="card-header d-flex justify-content-between">
+    <div class="card-header bg-white py-3">
 
-        <h3 class="card-title">
-            Data Role
-        </h3>
+    <div class="d-flex justify-content-between align-items-center">
 
-        <a href="{{ route('roles.create') }}" class="btn btn-primary btn-sm">
-            <i class="fas fa-plus"></i>
+        <div>
+
+            <h3 class="font-weight-bold mb-1">
+                Data Role
+            </h3>
+
+            <p class="text-muted mb-0">
+                Kelola seluruh data role pada sistem.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ route('roles.create') }}"
+            class="btn btn-primary">
+
+            <i class="fas fa-plus mr-1"></i>
+
             Tambah Role
+
         </a>
 
     </div>
+
+</div>
 
 <div class="card-body p-0">
 

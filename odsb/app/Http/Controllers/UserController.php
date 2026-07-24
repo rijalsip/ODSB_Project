@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 use App\Http\Requests\User\ImportUserRequest;
 use App\Imports\UserImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -28,14 +29,13 @@ class UserController extends Controller
     ) {
     }
 
-    public function index(): View
-    {
-        $users = $this->userService
-            ->getPaginatedUsers();
+  public function index(Request $request): View
+{
+    $users = $this->userService
+        ->getPaginatedUsers($request->search);
 
-        return view('users.index', compact('users'));
-    }
-
+    return view('users.index', compact('users'));
+}
     public function create(): View
     {
         $roles = Role::where('is_active', true)

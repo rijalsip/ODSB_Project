@@ -48,7 +48,7 @@
 
     </div>
 
-    <div class="card-body">
+   <div class="card-body p-0">
 
         @if ($errors->any())
 
@@ -147,7 +147,9 @@
     </div>
 
 </form>
-        <table class="table table-bordered table-striped">
+       <div class="table-responsive">
+
+    <table class="table table-bordered table-striped mb-0">
 
             <thead>
 
@@ -318,15 +320,15 @@
 
             </tbody>
 
-        </table>
+       </table>
 
-        <div class="mt-3">
+</div>
 
-            {{ $sites->links('pagination::bootstrap-4') }}
+<div class="p-3">
 
-        </div>
+    {{ $sites->links('pagination::bootstrap-4') }}
 
-    </div>
+</div>
 
 </div>
 <!-- Modal Import -->

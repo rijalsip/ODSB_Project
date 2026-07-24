@@ -11,6 +11,31 @@
 @endsection
 
 @section('content')
+<style>
+@media (max-width: 768px) {
+
+    .card-tools{
+        width:100%;
+        display:flex;
+        justify-content:flex-start;
+    }
+
+    .card-tools form{
+        width:auto;
+        margin-right:10px;
+        margin-bottom:8px;
+    }
+
+    .card-tools .input-group{
+        width:100px !important;
+    }
+
+    .card-tools .btn{
+        margin-bottom:5px;
+    }
+
+}
+</style>
 
 <div class="card">
 
@@ -20,11 +45,49 @@
             Data User
         </h3>
 
-       <div class="card-tools">
+ <div class="card-tools d-flex align-items-center">
+
+    <form
+        action="{{ route('users.index') }}"
+        method="GET"
+        class="mr-2"
+    >
+
+        <div class="input-group input-group-sm" style="width:220px;">
+
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="Cari Username..."
+                value="{{ request('search') }}"
+            >
+
+            <div class="input-group-append">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    <i class="fas fa-search"></i>
+                </button>
+
+                <a
+                    href="{{ route('users.index') }}"
+                    class="btn btn-secondary"
+                >
+                    <i class="fas fa-sync"></i>
+                </a>
+
+            </div>
+
+        </div>
+
+    </form>
 
     <a
         href="{{ route('users.template') }}"
-        class="btn btn-info btn-sm"
+        class="btn btn-info btn-sm mr-1"
     >
         <i class="fas fa-download"></i>
         Download Template
@@ -32,7 +95,7 @@
 
     <button
         type="button"
-        class="btn btn-success btn-sm"
+        class="btn btn-success btn-sm mr-1"
         data-toggle="modal"
         data-target="#importUserModal"
     >

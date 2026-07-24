@@ -24,7 +24,7 @@
 
     </div>
 
-    <div class="card-body">
+   <div class="card-body p-0">
 <form method="GET" class="mb-3">
 
     <div class="row">
@@ -114,7 +114,10 @@
     </div>
 
 </form>
-        <table class="table table-bordered table-striped">
+
+<div class="table-responsive">
+
+    <table class="table table-bordered table-striped mb-0">
 
             <thead>
 
@@ -218,13 +221,13 @@
 
         </table>
 
-        <div class="mt-3">
+</div>
 
-            {{ $reports->links('pagination::bootstrap-4') }}
+<div class="p-3">
 
-        </div>
+    {{ $reports->links('pagination::bootstrap-4') }}
 
-    </div>
+</div>
 
 </div>
 

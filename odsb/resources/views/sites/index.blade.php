@@ -12,43 +12,62 @@
 
 @section('content')
 
-<div class="card">
+<div class="card shadow border-0">
 
-    <div class="card-header d-flex justify-content-between align-items-center">
+    {{-- HEADER --}}
+    <div class="card-header bg-white py-3">
 
-        <h3 class="card-title">
-            Data Site
-        </h3>
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
 
-        <div>
+            <div class="d-flex align-items-center">
 
-            <button
-                type="button"
-                class="btn btn-success btn-sm"
-                data-toggle="modal"
-                data-target="#importModal">
+                <div class="mr-3">
+                    <i class="fas fa-broadcast-tower fa-2x text-primary"></i>
+                </div>
 
-                <i class="fas fa-file-excel"></i>
+                <div>
 
-                Import Excel
+                    <h3 class="font-weight-bold mb-1">
+                        Data Site
+                    </h3>
 
-            </button>
+                    <p class="text-muted mb-0">
+                        Kelola seluruh data site yang terdaftar pada sistem.
+                    </p>
 
-            <a
-                href="{{ route('sites.create') }}"
-                class="btn btn-primary btn-sm">
+                </div>
 
-                <i class="fas fa-plus"></i>
+            </div>
 
-                Tambah Site
+            <div class="ml-auto mt-3 mt-md-0">
 
-            </a>
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    data-toggle="modal"
+                    data-target="#importModal">
+
+                    <i class="fas fa-file-excel mr-1"></i>
+                    Import Excel
+
+                </button>
+
+                <a
+                    href="{{ route('sites.create') }}"
+                    class="btn btn-primary ml-2">
+
+                    <i class="fas fa-plus mr-1"></i>
+                    Tambah Site
+
+                </a>
+
+            </div>
 
         </div>
 
     </div>
 
-   <div class="card-body p-0">
+    <div class="card-body">
 
         @if ($errors->any())
 
@@ -67,280 +86,447 @@
             </div>
 
         @endif
-<form method="GET" action="{{ route('sites.index') }}" class="mb-3">
 
-    <div class="row">
+        {{-- FILTER --}}
+        <form
+            method="GET"
+            action="{{ route('sites.index') }}"
+            class="mb-4">
 
-        <div class="col-md-4">
-            <input
-                type="text"
-                name="keyword"
-                class="form-control"
-                placeholder="Cari Site ID / Site Name..."
-                value="{{ request('keyword') }}">
-        </div>
+            <div class="card border shadow-sm">
 
-        <div class="col-md-2">
-            <select name="status" class="form-control">
-                <option value="">Semua Status</option>
+                <div class="card-body">
 
-                @foreach (['NON', 'P1', 'P2', 'P3'] as $status)
-                    <option value="{{ $status }}"
-                        {{ request('status') == $status ? 'selected' : '' }}>
-                        {{ $status }}
-                    </option>
-                @endforeach
+                    {{-- SEARCH --}}
+                    <div class="row">
 
-            </select>
-        </div>
+                        <div class="col-12 mb-3">
 
-        <div class="col-md-3">
-            <select name="cluster" class="form-control">
+                            <label class="font-weight-bold">
+                                Cari Data
+                            </label>
 
-                <option value="">Semua Cluster</option>
+                            <div class="input-group">
 
-                @foreach ($clusters as $cluster)
+                                <input
+                                    type="text"
+                                    name="keyword"
+                                    class="form-control"
+                                    placeholder="Cari Site ID atau Site Name..."
+                                    value="{{ request('keyword') }}">
 
-                    <option
-                        value="{{ $cluster }}"
-                        {{ request('cluster') == $cluster ? 'selected' : '' }}>
+                                <div class="input-group-append">
 
-                        {{ $cluster }}
+                                    <span class="input-group-text bg-white">
 
-                    </option>
+                                        <i class="fas fa-search text-muted"></i>
 
-                @endforeach
+                                    </span>
 
-            </select>
-        </div>
+                                </div>
 
-        <div class="col-md-1">
-            <select name="per_page" class="form-control">
+                            </div>
 
-                @foreach ([10,25,50,100] as $page)
+                        </div>
 
-                    <option
-                        value="{{ $page }}"
-                        {{ request('per_page',10) == $page ? 'selected' : '' }}>
+                    </div>
 
-                        {{ $page }}
+                    {{-- FILTER BARIS 2 --}}
+                    <div class="row">
 
-                    </option>
+                        <div class="col-lg-4 col-md-6 mb-3">
 
-                @endforeach
+                            <label class="font-weight-bold">
+                                Status
+                            </label>
 
-            </select>
-        </div>
+                            <select
+                                name="status"
+                                class="form-control">
 
-        <div class="col-md-2">
+                                <option value="">
+                                    Semua Status
+                                </option>
 
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-search"></i> Cari
-            </button>
+                                @foreach (['NON','P1','P2','P3'] as $status)
 
-            <a href="{{ route('sites.index') }}" class="btn btn-secondary">
-                Reset
+                                    <option
+                                        value="{{ $status }}"
+                                        {{ request('status') == $status ? 'selected' : '' }}>
+
+                                        {{ $status }}
+
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 mb-3">
+
+                            <label class="font-weight-bold">
+                                Cluster
+                            </label>
+
+                            <select
+                                name="cluster"
+                                class="form-control">
+
+                                <option value="">
+                                    Semua Cluster
+                                </option>
+
+                                @foreach ($clusters as $cluster)
+
+                                    <option
+                                        value="{{ $cluster }}"
+                                        {{ request('cluster') == $cluster ? 'selected' : '' }}>
+
+                                        {{ $cluster }}
+
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-6 mb-3">
+
+                            <label class="font-weight-bold">
+                                Tampilkan
+                            </label>
+
+                            <select
+                                name="per_page"
+                                class="form-control">
+
+                                @foreach([10,25,50,100] as $page)
+
+                                    <option
+                                        value="{{ $page }}"
+                                        {{ request('per_page',10) == $page ? 'selected' : '' }}>
+
+                                        {{ $page }}
+
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-6 mb-3 d-flex align-items-end">
+
+                            <div class="btn-group w-100">
+
+                                <button
+                                    class="btn btn-primary"
+                                    type="submit">
+
+                                    <i class="fas fa-search"></i>
+
+                                </button>
+
+                                <a
+                                    href="{{ route('sites.index') }}"
+                                    class="btn btn-secondary">
+
+                                    <i class="fas fa-sync-alt"></i>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        {{-- TABLE --}}
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="bg-light">
+
+                    <tr>
+
+                        <th width="60">No</th>
+
+                        <th>Site ID</th>
+
+                        <th>Site Name</th>
+
+                        <th>Cluster</th>
+
+                        <th>City</th>
+
+                        <th>Status</th>
+
+                        <th>Kecamatan</th>
+
+                        <th>Program</th>
+
+                        <th>Tech</th>
+
+                        <th>Class</th>
+
+                        <th class="text-center" style="width:100px;">
+                            Aksi
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+                    @forelse($sites as $site)
+
+<tr>
+
+    <td>
+
+        {{
+            ($sites->currentPage() - 1)
+            * $sites->perPage()
+            + $loop->iteration
+        }}
+
+    </td>
+
+    <td class="font-weight-bold">
+
+        {{ $site->site_id }}
+
+    </td>
+
+    <td>
+
+        {{ $site->site_name ?? '-' }}
+
+    </td>
+
+    <td>
+
+        {{ $site->cluster ?? '-' }}
+
+    </td>
+
+    <td>
+
+        {{ $site->city ?? '-' }}
+
+    </td>
+
+    <td>
+
+        @php
+            $status = strtoupper($site->site_focus_mtd ?? 'NON');
+        @endphp
+
+        @switch($status)
+
+            @case('P1')
+
+                <span class="badge badge-danger px-3 py-2">
+                    P1
+                </span>
+
+                @break
+
+            @case('P2')
+
+                <span class="badge badge-warning px-3 py-2">
+                    P2
+                </span>
+
+                @break
+
+            @case('P3')
+
+                <span class="badge badge-info px-3 py-2">
+                    P3
+                </span>
+
+                @break
+
+            @default
+
+                <span class="badge badge-secondary px-3 py-2">
+                    NON
+                </span>
+
+        @endswitch
+
+    </td>
+
+    <td>
+
+        {{ $site->kecamatan ?? '-' }}
+
+    </td>
+
+    <td>
+
+        {{ $site->program ?? '-' }}
+
+    </td>
+
+    <td>
+
+        {{ $site->tech ?? '-' }}
+
+    </td>
+
+    <td>
+
+        {{ $site->class ?? '-' }}
+
+    </td>
+
+    <td class="text-center">
+
+        <div
+            class="btn-group"
+            role="group">
+
+            <a
+                href="{{ route('sites.edit', $site) }}"
+                class="btn btn-warning btn-sm"
+                title="Edit">
+
+                <i class="fas fa-edit"></i>
+
             </a>
+
+            <form
+                action="{{ route('sites.destroy', $site) }}"
+                method="POST"
+                class="d-inline">
+
+                @csrf
+
+                @method('DELETE')
+
+                <button
+                    type="submit"
+                    class="btn btn-danger btn-sm"
+                    onclick="return confirm('Yakin ingin menghapus site ini?')"
+                    title="Hapus">
+
+                    <i class="fas fa-trash"></i>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </td>
+
+</tr>
+
+@empty
+
+<tr>
+
+    <td
+        colspan="11"
+        class="text-center py-5">
+
+        <i
+            class="fas fa-folder-open fa-3x text-muted mb-3">
+        </i>
+
+        <br>
+
+        <span class="text-muted">
+
+            Belum ada data Site.
+
+        </span>
+
+    </td>
+
+</tr>
+
+@endforelse
+
+</tbody>
+            </table>
+
+        </div>
+
+        {{-- Pagination --}}
+        <div class="d-flex justify-content-between align-items-center flex-wrap p-3 border-top">
+
+            <div class="text-muted small">
+
+                Menampilkan
+
+                <strong>
+
+                    {{ $sites->firstItem() ?? 0 }}
+
+                </strong>
+
+                -
+
+                <strong>
+
+                    {{ $sites->lastItem() ?? 0 }}
+
+                </strong>
+
+                dari
+
+                <strong>
+
+                    {{ $sites->total() }}
+
+                </strong>
+
+                data
+
+            </div>
+
+            <div>
+
+                {{ $sites->links('pagination::bootstrap-4') }}
+
+            </div>
 
         </div>
 
     </div>
 
-</form>
-       <div class="table-responsive">
-
-    <table class="table table-bordered table-striped mb-0">
-
-            <thead>
-
-                <tr>
-
-                    <th width="60">
-                        No
-                    </th>
-
-                    <th>
-                        Site ID
-                    </th>
-
-                    <th>
-                        Site Name
-                    </th>
-
-                    <th>Cluster</th>
-<th>City</th>
-<th>Status</th>
-<th>Kecamatan</th>
-<th>Program</th>
-<th>Tech</th>
-<th>Class</th>
-
-                    <th width="180">
-                        Aksi
-                    </th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                @forelse($sites as $site)
-
-                    <tr>
-
-                        <td>
-
-                            {{
-                                ($sites->currentPage() - 1)
-                                * $sites->perPage()
-                                + $loop->iteration
-                            }}
-
-                        </td>
-
-                        <td>
-
-                            {{ $site->site_id }}
-
-                        </td>
-
-                        <td>
-
-                            {{ $site->site_name ?? '-' }}
-
-                        </td>
-
-                        <td>
-    {{ $site->cluster ?? '-' }}
-</td>
-
-<td>
-    {{ $site->city ?? '-' }}
-</td>
-
-<td>
-
-    @php
-        $status = strtoupper($site->site_focus_mtd ?? 'NON');
-    @endphp
-
-    @if($status == 'P1')
-
-        <span class="badge badge-danger">
-            P1
-        </span>
-
-    @elseif($status == 'P2')
-
-        <span class="badge badge-warning">
-            P2
-        </span>
-
-    @elseif($status == 'P3')
-
-        <span class="badge badge-info">
-            P3
-        </span>
-
-    @else
-
-        <span class="badge badge-secondary">
-            NON
-        </span>
-
-    @endif
-
-</td>
-
-<td>
-    {{ $site->kecamatan ?? '-' }}
-</td>
-
-<td>
-    {{ $site->program ?? '-' }}
-</td>
-
-<td>
-    {{ $site->tech ?? '-' }}
-</td>
-
-<td>
-    {{ $site->class ?? '-' }}
-</td>
-                        <td>
-
-                            <a
-                                href="{{ route('sites.edit', $site) }}"
-                                class="btn btn-warning btn-sm">
-
-                                <i class="fas fa-edit"></i>
-
-                            </a>
-
-                            <form
-                                action="{{ route('sites.destroy', $site) }}"
-                                method="POST"
-                                class="d-inline">
-
-                                @csrf
-
-                                @method('DELETE')
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Yakin ingin menghapus site ini?')">
-
-                                    <i class="fas fa-trash"></i>
-
-                                </button>
-
-                            </form>
-
-                        </td>
-
-                    </tr>
-
-                @empty
-
-                    <tr>
-
-                        <td
-                            colspan="10"
-                            class="text-center">
-
-                            Belum ada data Site.
-
-                        </td>
-
-                    </tr>
-
-                @endforelse
-
-            </tbody>
-
-       </table>
-
 </div>
 
-<div class="p-3">
 
-    {{ $sites->links('pagination::bootstrap-4') }}
+{{-- ===========================
+        MODAL IMPORT
+=========================== --}}
 
-</div>
-
-</div>
-<!-- Modal Import -->
 <div
     class="modal fade"
     id="importModal"
     tabindex="-1"
+    aria-labelledby="importModalLabel"
     aria-hidden="true">
 
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
 
-        <div class="modal-content">
+        <div class="modal-content border-0 shadow">
 
             <form
                 action="{{ route('sites.import') }}"
@@ -349,11 +535,13 @@
 
                 @csrf
 
-                <div class="modal-header">
+                <div class="modal-header bg-success text-white">
 
-                    <h5 class="modal-title">
+                    <h5
+                        class="modal-title"
+                        id="importModalLabel">
 
-                        <i class="fas fa-file-excel text-success mr-2"></i>
+                        <i class="fas fa-file-excel mr-2"></i>
 
                         Import Data Site
 
@@ -361,7 +549,7 @@
 
                     <button
                         type="button"
-                        class="close"
+                        class="close text-white"
                         data-dismiss="modal">
 
                         <span>&times;</span>
@@ -374,7 +562,7 @@
 
                     <div class="form-group">
 
-                        <label>
+                        <label class="font-weight-bold">
 
                             Pilih File Excel
 
@@ -399,8 +587,8 @@
 
                         <small class="text-muted">
 
-                            Format yang didukung:
-                            <strong>.xlsx</strong> dan
+                            Format yang didukung :
+                            <strong>.xlsx</strong>,
                             <strong>.xls</strong>
 
                         </small>
@@ -416,6 +604,8 @@
                         class="btn btn-secondary"
                         data-dismiss="modal">
 
+                        <i class="fas fa-times mr-1"></i>
+
                         Batal
 
                     </button>
@@ -424,7 +614,7 @@
                         type="submit"
                         class="btn btn-success">
 
-                        <i class="fas fa-upload"></i>
+                        <i class="fas fa-upload mr-1"></i>
 
                         Import
 
@@ -441,14 +631,13 @@
 </div>
 
 @endsection
-
 @push('scripts')
 
 @if ($errors->has('file'))
 
 <script>
 
-$(function () {
+$(document).ready(function () {
 
     $('#importModal').modal('show');
 
@@ -457,5 +646,16 @@ $(function () {
 </script>
 
 @endif
+
+<script>
+
+$(function () {
+
+    // Tooltip
+    $('[data-toggle="tooltip"]').tooltip();
+
+});
+
+</script>
 
 @endpush

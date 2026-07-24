@@ -12,9 +12,9 @@
 
 @section('content')
 
-<div class="card">
+<div class="card shadow-sm border-0">
 
-    <div class="card-header">
+    <div class="card-header bg-white">
 
         <h3 class="card-title">
 
@@ -24,32 +24,56 @@
 
     </div>
 
-   <div class="card-body p-0">
-<form method="GET" class="mb-3">
+   <div class="card-body">
 
-    <div class="row">
+<form method="GET">
+
+    <div class="row g-3">
 
         <!-- Search -->
-        <div class="col-md-3">
+        <div class="col-lg-5 col-md-12">
+
+            <label class="font-weight-bold">
+
+                Cari Data
+
+            </label>
+
             <input
                 type="text"
                 name="search"
                 class="form-control"
                 placeholder="Cari DS, Site ID, Site Name..."
                 value="{{ request('search') }}">
+
         </div>
 
         <!-- Tanggal -->
-        <div class="col-md-2">
+        <div class="col-lg-3 col-md-6">
+
+            <label class="font-weight-bold">
+
+                Tanggal
+
+            </label>
+
             <input
                 type="date"
                 name="report_date"
                 class="form-control"
                 value="{{ request('report_date') }}">
+
         </div>
 
         <!-- DS -->
-        <div class="col-md-3">
+        <div class="col-lg-4 col-md-6">
+
+            <label class="font-weight-bold">
+
+                DS
+
+            </label>
+
             <select
                 name="user_id"
                 class="form-control">
@@ -71,43 +95,51 @@
                 @endforeach
 
             </select>
-        </div>
 
-        <!-- Cari -->
-        <div class="col-md-2">
-            <button class="btn btn-primary btn-block">
-                <i class="fas fa-search"></i>
-                Cari
-            </button>
-        </div>
-
-        <!-- Reset -->
-        <div class="col-md-2">
-            <a
-                href="{{ route('report-sales.index') }}"
-                class="btn btn-secondary btn-block">
-
-                <i class="fas fa-sync"></i>
-                Reset
-
-            </a>
         </div>
 
     </div>
 
-    <div class="row mt-2">
+    <div class="row mt-4">
 
-        <div class="col-md-12 text-right">
+        <div class="col-md-12 d-flex justify-content-between flex-wrap">
 
-            <a
-                href="{{ route('report-sales.export', request()->query()) }}"
-                class="btn btn-success">
+            <div>
 
-                <i class="fas fa-file-excel"></i>
+                <button
+                    class="btn btn-primary mr-2">
 
-                Export Excel
+                    <i class="fas fa-search"></i>
 
-            </a>
+                    Cari
+
+                </button>
+
+                <a
+                    href="{{ route('report-sales.index') }}"
+                    class="btn btn-outline-secondary">
+
+                    <i class="fas fa-sync"></i>
+
+                    Reset
+
+                </a>
+
+            </div>
+
+            <div>
+
+                <a
+                    href="{{ route('report-sales.export', request()->query()) }}"
+                    class="btn btn-success">
+
+                    <i class="fas fa-file-excel"></i>
+
+                    Export Excel
+
+                </a>
+
+            </div>
 
         </div>
 
@@ -115,9 +147,13 @@
 
 </form>
 
+<hr>
+
 <div class="table-responsive">
 
-    <table class="table table-bordered table-striped mb-0">
+<div class="table-responsive">
+
+    <table class="table table-hover table-bordered align-middle mb-0">
 
             <thead>
 
@@ -192,7 +228,8 @@
 
     <a
         href="{{ route('report-sales.show', $report->id) }}"
-        class="btn btn-info btn-sm">
+        class="btn btn-info btn-sm px-3"
+        title="Lihat Detail">
 
         <i class="fas fa-eye"></i>
 

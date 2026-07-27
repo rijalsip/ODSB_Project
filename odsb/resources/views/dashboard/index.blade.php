@@ -79,6 +79,14 @@
     color:#777;
     font-size:13px;
 }
+.ds-table th{
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.ds-table td{
+    vertical-align: middle;
+}
 
 @media (max-width: 768px){
 
@@ -327,41 +335,172 @@ $colors = [
     </div>
 
 </div>
+<div class="card card-outline card-success">
+
+    <div class="card-header">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+    <h3 class="card-title mb-2 mb-md-0">
+        DS Productivity
+    </h3>
+
+ <form method="GET" action="{{ route('dashboard') }}" class="form-inline">
+
+    <label class="mr-2 mb-0">
+        Dari
+    </label>
+
+    <input
+        type="date"
+        name="start_date"
+        class="form-control form-control-sm mr-3"
+        value="{{ request('start_date') }}">
+
+    <label class="mr-2 mb-0">
+        Sampai
+    </label>
+
+    <input
+        type="date"
+        name="end_date"
+        class="form-control form-control-sm mr-3"
+        value="{{ request('end_date') }}">
+
+    <button
+        type="submit"
+        class="btn btn-sm btn-success">
+        <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+
+</form>
+</div>
+
+    </div>
+
+    <div class="card-body p-0">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover mb-0 ds-table">
+
+                <thead class="bg-success">
+
+                    <tr>
+
+                        <th>Cluster</th>
+                        <th>Nama DS</th>
+                        <th class="text-center">Visit</th>
+                        <th class="text-center">P1</th>
+                        <th class="text-center">P2</th>
+                        <th class="text-center">P3</th>
+                        <th class="text-center">NON SITE FOCUS</th>
+                        <th class="text-center">TRX</th>
+                        <th class="text-right">Revenue</th>
+
+                    </tr>
+
+                </thead>
+
+            <tbody id="dsTableBody">
+
+    @forelse($dsProductivity as $row)
+
+    <tr
+        data-visit="{{ $row->total_visit }}"
+        data-p1="{{ $row->p1 }}"
+        data-p2="{{ $row->p2 }}"
+        data-p3="{{ $row->p3 }}"
+        data-non="{{ $row->non_site_focus }}"
+        data-trx="{{ $row->total_trx }}"
+        data-revenue="{{ $row->total_rev }}">
+
+        <td>{{ $row->cluster }}</td>
+
+        <td>{{ $row->ds_name }}</td>
+
+        <td class="text-center">
+            {{ number_format($row->total_visit) }}
+        </td>
+
+        <td class="text-center">
+            <span class="badge badge-danger badge-count">
+                {{ $row->p1 }}
+            </span>
+        </td>
+
+        <td class="text-center">
+            <span class="badge badge-warning badge-count">
+                {{ $row->p2 }}
+            </span>
+        </td>
+
+        <td class="text-center">
+            <span class="badge badge-info badge-count">
+                {{ $row->p3 }}
+            </span>
+        </td>
+
+        <td class="text-center">
+            <span class="badge badge-secondary badge-count">
+                {{ $row->non_site_focus }}
+            </span>
+        </td>
+
+        <td class="text-center">
+            {{ number_format($row->total_trx) }}
+        </td>
+
+        <td class="text-right">
+            Rp {{ number_format($row->total_rev,0,',','.') }}
+        </td>
+
+    </tr>
+
+    @empty
+
+    <tr>
+        <td colspan="9" class="text-center py-4">
+            Belum ada data.
+        </td>
+    </tr>
+
+    @endforelse
+
+</tbody>
+   
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 @endsection
 
 @push('scripts')
 
 <script>
 
-$(function(){
+$(function () {
 
     $('.monitor-card').hover(
-
-        function(){
-
+        function () {
             $(this).css({
-
-                transition:'0.25s',
-
-                cursor:'pointer'
-
+                transition: '0.25s',
+                cursor: 'pointer'
             });
-
         },
-
-        function(){
-
+        function () {
             $(this).css({
-
-                transition:'0.25s'
-
+                transition: '0.25s'
             });
-
         }
-
     );
 
-});
+   let selectedSort = $('#leaderboardSort').val();
+
 
 </script>
 

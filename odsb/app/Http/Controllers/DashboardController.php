@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\ReportSales;
 use App\Models\Role;
 use App\Models\Site;
@@ -127,14 +128,55 @@ class DashboardController extends Controller
 
         ];
 
-        return view('dashboard.index', compact(
-            'totalDirectSales',
-            'totalSite',
-            'todayTrx',
-            'todayRevenue',
-            'monthTrx',
-            'monthRevenue',
-            'monitoring'
-        ));
+      /*
+|--------------------------------------------------------------------------
+| DS Productivity
+|--------------------------------------------------------------------------
+*/
+$startDate = request('start_date');
+$endDate   = request('end_date');
+
+$query = ReportSales::select(
+    'users.cluster',
+    'users.name as ds_name',
+    DB::raw('COUNT(report_sales.id) as total_visit'),
+    DB::raw("SUM(CASE WHEN sites.site_focus_mtd = 'P1' THEN 1 ELSE 0 END) as p1"),
+    DB::raw("SUM(CASE WHEN sites.site_focus_mtd = 'P2' THEN 1 ELSE 0 END) as p2"),
+    DB::raw("SUM(CASE WHEN sites.site_focus_mtd = 'P3' THEN 1 ELSE 0 END) as p3"),
+    DB::raw("SUM(CASE WHEN sites.site_focus_mtd = 'NON SITE FOCUS' THEN 1 ELSE 0 END) as non_site_focus"),
+    DB::raw('SUM(report_sales.total_trx) as total_trx'),
+    DB::raw('SUM(report_sales.total_rev) as total_rev')
+)
+->join('users', 'report_sales.user_id', '=', 'users.id')
+->join('sites', 'report_sales.site_id', '=', 'sites.id')
+
+->when($startDate, function ($q) use ($startDate) {
+    $q->whereDate('report_sales.report_date', '>=', $startDate);
+})
+
+->when($endDate, function ($q) use ($endDate) {
+    $q->whereDate('report_sales.report_date', '<=', $endDate);
+})
+
+->groupBy(
+    'users.id',
+    'users.cluster',
+    'users.name'
+);
+$query->orderByDesc(DB::raw('SUM(report_sales.total_rev)'));
+
+
+$dsProductivity = $query->get();
+
+ return view('dashboard.index', compact(
+    'totalDirectSales',
+    'totalSite',
+    'todayTrx',
+    'todayRevenue',
+    'monthTrx',
+    'monthRevenue',
+    'monitoring',
+    'dsProductivity'
+));
     }
 }

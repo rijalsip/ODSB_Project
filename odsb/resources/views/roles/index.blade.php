@@ -16,17 +16,27 @@
 
     <div class="card-header bg-white py-3">
 
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
 
-        <div>
+        <div class="d-flex align-items-center mb-2 mb-md-0">
 
-            <h3 class="font-weight-bold mb-1">
-                Data Role
-            </h3>
+            <div class="mr-3">
 
-            <p class="text-muted mb-0">
-                Kelola seluruh data role pada sistem.
-            </p>
+                <i class="fas fa-user-shield fa-2x text-primary"></i>
+
+            </div>
+
+            <div>
+
+                <h3 class="font-weight-bold mb-1">
+                    Data Role
+                </h3>
+
+                <p class="text-muted mb-0">
+                    Kelola seluruh data role pada sistem.
+                </p>
+
+            </div>
 
         </div>
 
@@ -44,12 +54,57 @@
 
 </div>
 
-<div class="card-body p-0">
+<div class="card-body">
 
+    <form
+        action="{{ route('roles.index') }}"
+        method="GET"
+        class="mb-4">
+
+        <div class="row mt-2 px-lg-3">
+
+    <div class="col-lg-5">
+
+        <div class="input-group">
+
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="Cari nama role..."
+                value="{{ request('search') }}">
+
+            <div class="input-group-append">
+
+                <button
+                    class="btn btn-primary"
+                    type="submit">
+
+                    <i class="fas fa-search"></i>
+
+                </button>
+
+                <a
+                    href="{{ route('roles.index') }}"
+                    class="btn btn-outline-secondary">
+
+                    <i class="fas fa-sync-alt"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</form>
     <div class="table-responsive">
 
-        <table class="table table-bordered table-striped mb-0">
-        <thead>
+        <table class="table table-bordered table-hover align-middle">
+        <thead class="bg-light">
             <tr>
                 <th width="50">No</th>
                 <th>Nama</th>

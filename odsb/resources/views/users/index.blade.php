@@ -11,114 +11,210 @@
 @endsection
 
 @section('content')
-<style>
-@media (max-width: 768px) {
 
-    .card-tools{
-        width:100%;
-        display:flex;
-        justify-content:flex-start;
-    }
+<div class="card shadow border-0">
 
-    .card-tools form{
-        width:auto;
-        margin-right:10px;
-        margin-bottom:8px;
-    }
+    {{-- HEADER DESKTOP --}}
+    <div class="card-header bg-white py-3 d-none d-md-block">
 
-    .card-tools .input-group{
-        width:100px !important;
-    }
+        <div class="d-flex justify-content-between align-items-center">
 
-    .card-tools .btn{
-        margin-bottom:5px;
-    }
+            <div class="d-flex align-items-center">
 
-}
-</style>
+                <div class="mr-3">
 
-<div class="card">
+                    <i class="fas fa-users fa-2x text-primary"></i>
 
-    <div class="card-header">
+                </div>
 
-        <h3 class="card-title">
-            Data User
-        </h3>
+                <div>
 
- <div class="card-tools d-flex align-items-center">
+                    <h3 class="font-weight-bold mb-1">
 
-    <form
-        action="{{ route('users.index') }}"
-        method="GET"
-        class="mr-2"
-    >
+                        Data User
 
-        <div class="input-group input-group-sm" style="width:220px;">
+                    </h3>
 
-            <input
-                type="text"
-                name="search"
-                class="form-control"
-                placeholder="Cari Username..."
-                value="{{ request('search') }}"
-            >
+                    <p class="text-muted mb-0">
 
-            <div class="input-group-append">
+                        Kelola seluruh data pengguna yang terdaftar pada sistem.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <a
+                    href="{{ route('users.template') }}"
+                    class="btn btn-info">
+
+                    <i class="fas fa-download mr-1"></i>
+
+                    Download Template
+
+                </a>
 
                 <button
-                    type="submit"
-                    class="btn btn-primary"
-                >
-                    <i class="fas fa-search"></i>
+                    type="button"
+                    class="btn btn-success ml-2"
+                    data-toggle="modal"
+                    data-target="#importUserModal">
+
+                    <i class="fas fa-file-excel mr-1"></i>
+
+                    Import User
+
                 </button>
 
                 <a
-                    href="{{ route('users.index') }}"
-                    class="btn btn-secondary"
-                >
-                    <i class="fas fa-sync"></i>
+                    href="{{ route('users.create') }}"
+                    class="btn btn-primary ml-2">
+
+                    <i class="fas fa-plus mr-1"></i>
+
+                    Tambah User
+
                 </a>
 
             </div>
 
         </div>
 
-    </form>
-
-    <a
-        href="{{ route('users.template') }}"
-        class="btn btn-info btn-sm mr-1"
-    >
-        <i class="fas fa-download"></i>
-        Download Template
-    </a>
-
-    <button
-        type="button"
-        class="btn btn-success btn-sm mr-1"
-        data-toggle="modal"
-        data-target="#importUserModal"
-    >
-        <i class="fas fa-file-excel"></i>
-        Import User
-    </button>
-
-    <a
-        href="{{ route('users.create') }}"
-        class="btn btn-primary btn-sm"
-    >
-        <i class="fas fa-plus"></i>
-        Tambah User
-    </a>
-
-</div>
     </div>
 
-    <div class="card-body table-responsive p-0">
+    {{-- HEADER MOBILE --}}
+    <div class="card-header bg-white py-3 d-block d-md-none">
+
+        <div class="d-flex align-items-center mb-3">
+
+            <i class="fas fa-users fa-2x text-primary mr-3"></i>
+
+            <div>
+
+                <h4 class="font-weight-bold mb-1">
+
+                    Data User
+
+                </h4>
+
+                <small class="text-muted">
+
+                    Kelola seluruh data pengguna.
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <a
+            href="{{ route('users.template') }}"
+            class="btn btn-info btn-block mb-2">
+
+            <i class="fas fa-download mr-1"></i>
+
+            Download Template
+
+        </a>
+
+        <div class="row">
+
+            <div class="col-6 pr-1">
+
+                <button
+                    type="button"
+                    class="btn btn-success btn-block"
+                    data-toggle="modal"
+                    data-target="#importUserModal">
+
+                    <i class="fas fa-file-excel mr-1"></i>
+
+                    Import
+
+                </button>
+
+            </div>
+
+            <div class="col-6 pl-1">
+
+                <a
+                    href="{{ route('users.create') }}"
+                    class="btn btn-primary btn-block">
+
+                    <i class="fas fa-plus mr-1"></i>
+
+                    Tambah
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+<form action="{{ route('users.index') }}" method="GET" class="mb-4">
+
+    <div class="row align-items-end">
+
+        <div class="col-lg-6 col-md-8 col-12">
+
+            <label class="font-weight-bold">
+                Cari User
+            </label>
+
+            <div class="input-group">
+
+                <input
+                    type="text"
+                    name="search"
+                    class="form-control"
+                    placeholder="Cari nama atau username..."
+                    value="{{ request('search') }}">
+
+                <div class="input-group-append">
+
+                    <button
+                        class="btn btn-primary"
+                        type="submit">
+
+                        <i class="fas fa-search"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-12 mt-2 mt-md-0">
+
+            <a href="{{ route('users.index') }}"
+               class="btn btn-secondary btn-block">
+
+                <i class="fas fa-sync-alt mr-1"></i>
+
+                Reset
+
+            </a>
+
+        </div>
+
+    </div>
+
+</form>
+
+<div class="table-responsive">
 
         <table class="table table-bordered table-hover">
 
-            <thead>
+           <thead class="bg-light">
 
                 <tr>
 
@@ -261,6 +357,8 @@
         {{ $users->links() }}
 
     </div>
+
+</div>
 
 </div>
 

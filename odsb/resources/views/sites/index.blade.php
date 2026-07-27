@@ -12,6 +12,44 @@
 
 @section('content')
 
+@push('styles')
+
+<style>
+
+.pagination-wrapper{
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+}
+
+.pagination-wrapper .pagination{
+    flex-wrap:nowrap;
+    white-space:nowrap;
+    margin-bottom:0;
+}
+
+.pagination-wrapper::-webkit-scrollbar{
+    height:5px;
+}
+
+@media (max-width:768px){
+
+    .pagination-info{
+        width:100%;
+        text-align:center;
+        margin-bottom:12px;
+    }
+
+    .pagination-wrapper{
+        width:100%;
+    }
+
+}
+
+</style>
+
+@endpush
+
 <div class="card shadow border-0">
 
     {{-- HEADER --}}
@@ -402,7 +440,7 @@
 
             <a
                 href="{{ route('sites.edit', $site) }}"
-                class="btn btn-warning btn-sm"
+                class="btn btn-warning btn-sm mr-1"
                 title="Edit">
 
                 <i class="fas fa-edit"></i>
@@ -470,47 +508,36 @@
         {{-- Pagination --}}
         <div class="d-flex justify-content-between align-items-center flex-wrap p-3 border-top">
 
-            <div class="text-muted small">
+    <div class="text-muted small pagination-info">
 
-                Menampilkan
+        Menampilkan
 
-                <strong>
+        <strong>{{ $sites->firstItem() ?? 0 }}</strong>
 
-                    {{ $sites->firstItem() ?? 0 }}
+        -
 
-                </strong>
+        <strong>{{ $sites->lastItem() ?? 0 }}</strong>
 
-                -
+        dari
 
-                <strong>
+        <strong>{{ $sites->total() }}</strong>
 
-                    {{ $sites->lastItem() ?? 0 }}
+        data
 
-                </strong>
+    </div>
 
-                dari
+    <div class="pagination-wrapper">
 
-                <strong>
-
-                    {{ $sites->total() }}
-
-                </strong>
-
-                data
-
-            </div>
-
-            <div>
-
-                {{ $sites->links('pagination::bootstrap-4') }}
-
-            </div>
-
-        </div>
+        {{ $sites->links('pagination::bootstrap-4') }}
 
     </div>
 
 </div>
+
+    </div>
+
+</div>
+
 
 
 {{-- ===========================

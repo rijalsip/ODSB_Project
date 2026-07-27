@@ -14,14 +14,8 @@
 
 <style>
 
-.small-box{
-    border-radius:14px;
-    box-shadow:0 6px 18px rgba(0,0,0,.08);
-    min-height:165px;
-}
-
-.small-box .inner{
-    min-height:165px;
+.monitor-card{
+    height:100%;
 }
 
 .small-box .inner{
@@ -57,39 +51,45 @@
 }
 
 .monitor-body{
-    padding:22px;
+    padding:18px;
 }
 
 .monitor-title{
-    font-size:18px;
+    font-size:17px;
     font-weight:700;
-    margin-bottom:25px;
+    margin-bottom:18px;
 }
 
 .monitor-number{
-    font-size:34px;
+    font-size:30px;
     font-weight:700;
     line-height:1;
 }
 
-.monitor-label{
-    color:#777;
-    font-size:13px;
-}
-
 .monitor-divider{
-    margin:20px 0;
+    margin:14px 0;
 }
 
 .monitor-revenue{
-    font-size:23px;
-    font-weight:bold;
-    color:#28a745;
+    font-size:20px;
+    font-weight:700;
 }
 
 .monitor-revenue-label{
     color:#777;
     font-size:13px;
+}
+
+@media (max-width: 768px){
+
+    .small-box .icon{
+        display:block !important;
+        font-size:55px !important;
+        opacity:.18;
+        right:12px;
+        top:12px;
+    }
+
 }
 
 </style>
@@ -266,8 +266,8 @@ $colors = [
 
 @foreach($monitoring as $index => $item)
 
-<div class="col-lg-4 col-md-6 mb-4">
-
+<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-4">
+    
     <div class="monitor-card">
 
         <div class="monitor-header {{ $colors[$index % count($colors)] }}"></div>

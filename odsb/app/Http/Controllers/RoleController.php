@@ -17,13 +17,18 @@ class RoleController extends Controller
     ) {
     }
 
-    public function index(): View
-    {
-        $roles = $this->roleService
-            ->getPaginatedRoles();
+   public function index(): View
+{
+    $roles = $this->roleService
+        ->getPaginatedRoles(
+            request('search')
+        );
 
-        return view('roles.index', compact('roles'));
-    }
+    return view(
+        'roles.index',
+        compact('roles')
+    );
+}
 
     public function create(): View
     {

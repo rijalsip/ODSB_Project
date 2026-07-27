@@ -195,14 +195,9 @@
 
         <div class="col-lg-2 col-md-4 col-12 mt-2 mt-md-0">
 
-            <a href="{{ route('users.index') }}"
-               class="btn btn-secondary btn-block">
-
-                <i class="fas fa-sync-alt mr-1"></i>
-
-                Reset
-
-            </a>
+            <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">
+    <i class="fas fa-sync-alt"></i> Reset
+</a>
 
         </div>
 

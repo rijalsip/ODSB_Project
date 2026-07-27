@@ -148,7 +148,7 @@
                                     Semua Status
                                 </option>
 
-                                @foreach (['NON','P1','P2','P3'] as $status)
+                                @foreach (['NON SITE FOCUS','P1','P2','P3'] as $status)
 
                                     <option
                                         value="{{ $status }}"
@@ -331,7 +331,7 @@
     <td>
 
         @php
-            $status = strtoupper($site->site_focus_mtd ?? 'NON');
+            $status = strtoupper($site->site_focus_mtd ?? 'NON SITE FOCUS');
         @endphp
 
         @switch($status)
@@ -363,7 +363,7 @@
             @default
 
                 <span class="badge badge-secondary px-3 py-2">
-                    NON
+                    NON SITE FOCUS
                 </span>
 
         @endswitch

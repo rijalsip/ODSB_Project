@@ -85,6 +85,13 @@
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+.ds-table td{
+    vertical-align: middle;
+}
+
+>>>>>>> 3e0739406c1a1c8161171a2184667dadfdac77a0
 @media (max-width: 768px){
 
     .small-box .icon{
@@ -97,6 +104,7 @@
 
 }
 
+<<<<<<< HEAD
 =======
 .ds-table td{
     vertical-align: middle;
@@ -107,6 +115,8 @@
     font-size:13px;
 }
 >>>>>>> 7c6756fa5958953cb67e60155464f53c6edd12c3
+=======
+>>>>>>> 3e0739406c1a1c8161171a2184667dadfdac77a0
 </style>
 
 @endpush

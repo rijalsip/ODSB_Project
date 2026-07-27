@@ -115,7 +115,7 @@
             >
                 <option value="">-- Pilih Status --</option>
 
-                @foreach (['NON','P1','P2','P3'] as $status)
+                @foreach (['NON SITE FOCUS','P1','P2','P3'] as $status)
                     <option
                         value="{{ $status }}"
                         {{ old('site_focus_mtd', $site->site_focus_mtd ?? '') == $status ? 'selected' : '' }}
